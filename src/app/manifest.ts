@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
+import { SITE_DESCRIPTION } from "@/lib/site";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
     name: "Bóveda",
     short_name: "Bóveda",
-    description: "Credenciales de cada cliente, en un solo lugar y cifradas.",
+    description: SITE_DESCRIPTION,
     lang: "es",
     start_url: "/",
     scope: "/",
