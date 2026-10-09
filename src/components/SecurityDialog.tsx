@@ -11,7 +11,7 @@ const fmt = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString("es-
 
 /** Dispositivos que abren la bóveda con biometría: listar, agregar el actual y revocar. */
 export function SecurityDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { passkeys, biometrics, enrollPasskey, removePasskey, toast } = useVault();
+  const { passkeys, biometrics, devicePasskey, enrollPasskey, removePasskey, toast } = useVault();
   const [adding, setAdding] = useState(false);
   const [pw, setPw] = useState("");
   const [err, setErr] = useState<string | null>(null);
@@ -64,7 +64,7 @@ export function SecurityDialog({ open, onClose }: { open: boolean; onClose: () =
               <li key={p.id} className="flex items-center gap-3 rounded-md border border-solid border-border bg-raised py-2.5 pr-2 pl-3">
                 <span className="grid size-9 flex-none place-items-center rounded-xl bg-accent-soft text-accent-ink"><Fingerprint aria-hidden className="size-[18px]" /></span>
                 <span className="grid min-w-0 flex-1">
-                  <b className="truncate text-sm/5 font-bold">{p.label}</b>
+                  <b className="truncate text-sm/5 font-bold">{p.label}{p.credential_id === devicePasskey && <span className="ml-2 text-xs font-semibold text-accent-ink">Este dispositivo</span>}</b>
                   <small className="text-xs/4 text-muted-foreground">Alta {fmt(p.created_at)} · último uso {fmt(p.last_used_at)}</small>
                 </span>
                 <IconButton label={`Revocar ${p.label}`} onClick={() => revoke(p.id)}><Trash2 /></IconButton>
@@ -79,7 +79,7 @@ export function SecurityDialog({ open, onClose }: { open: boolean; onClose: () =
             <Field label="Contraseña maestra" type="password" autoComplete="current-password" autoFocus required value={pw} onChange={(e) => setPw(e.target.value)} error={err} hint="Se pide una vez para entregarle la llave a este dispositivo." />
             <Button type="submit" variant="primary" icon={<Fingerprint />} loading={busy}>Activar {biometrics.name}</Button>
           </form>
-        ) : (
+        ) : devicePasskey ? null : (
           <Button icon={<Fingerprint />} onClick={() => setAdding(true)}>Agregar este dispositivo</Button>
         )}
       </div>

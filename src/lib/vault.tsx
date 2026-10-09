@@ -19,6 +19,8 @@ type VaultCtx = {
   /** Dispositivos que pueden abrir la bóveda con biometría. */
   passkeys: PasskeyRecord[];
   biometrics: { supported: boolean; name: string };
+  /** id de la passkey registrada o usada en este navegador, si sigue vigente. */
+  devicePasskey: string | null;
   unlockWithPasskey: () => Promise<void>;
   enrollPasskey: (master: string) => Promise<void>;
   removePasskey: (id: string) => Promise<void>;
@@ -35,6 +37,15 @@ const Ctx = createContext<VaultCtx | null>(null);
 export const AUTO_LOCK_MS = 15 * 60 * 1000;
 const CLIPBOARD_CLEAR_MS = 30 * 1000;
 
+// Recuerda qué passkey vive en este navegador: decide si la pantalla de bloqueo abre con biometría
+const DEVICE_KEY = "bv-passkey-device";
+const readDevice = () => {
+  try { return localStorage.getItem(DEVICE_KEY); } catch { return null; }
+};
+const writeDevice = (id: string) => {
+  try { localStorage.setItem(DEVICE_KEY, id); } catch { /* sin almacenamiento */ }
+};
+
 type Toast = { id: number; msg: string; tone: "ok" | "error" };
 
 export function VaultProvider({ children }: { children: ReactNode }) {
@@ -45,6 +56,8 @@ export function VaultProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [passkeys, setPasskeys] = useState<PasskeyRecord[]>([]);
   const [biometrics, setBiometrics] = useState({ supported: false, name: "biometría" });
+  const [deviceId, setDeviceId] = useState<string | null>(null);
+  const devicePasskey = deviceId && passkeys.some((p) => p.credential_id === deviceId) ? deviceId : null;
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -55,6 +68,7 @@ export function VaultProvider({ children }: { children: ReactNode }) {
         setRecord(r);
         setPasskeys(pk);
         setBiometrics({ supported, name: biometricName() });
+        setDeviceId(readDevice());
         setStatus(r ? "locked" : "setup");
       })
       .catch((e: Error) => {
@@ -127,6 +141,8 @@ export function VaultProvider({ children }: { children: ReactNode }) {
     const k = await unwrapDekWithSecret(secret, row, credentialId);
     setDek(k);
     setStatus("unlocked");
+    writeDevice(credentialId);
+    setDeviceId(credentialId);
     touchPasskey(row.id)
       .then(() => setPasskeys((p) => p.map((x) => (x.id === row.id ? { ...x, last_used_at: new Date().toISOString() } : x))))
       .catch(() => { /* solo es informativo */ });
@@ -141,6 +157,8 @@ export function VaultProvider({ children }: { children: ReactNode }) {
       const wrap = await wrapDekWithSecret(extractable, secret, credentialId);
       const row = await savePasskey({ credential_id: credentialId, prf_salt: prfSalt, ...wrap, label: deviceLabel() });
       setPasskeys((p) => [...p, row]);
+      writeDevice(credentialId);
+      setDeviceId(credentialId);
     },
     [record, passkeys],
   );
@@ -183,7 +201,7 @@ export function VaultProvider({ children }: { children: ReactNode }) {
   );
 
   return (
-    <Ctx.Provider value={{ status, error, dek, setup, unlock, verifyMaster, passkeys, biometrics, unlockWithPasskey, enrollPasskey, removePasskey, lock, lockedByUser, changeMaster, copy, toast }}>
+    <Ctx.Provider value={{ status, error, dek, setup, unlock, verifyMaster, passkeys, biometrics, devicePasskey, unlockWithPasskey, enrollPasskey, removePasskey, lock, lockedByUser, changeMaster, copy, toast }}>
       {children}
       <div className="toasts" role="status" aria-live="polite">
         {toasts.map((t) => (

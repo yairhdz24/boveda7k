@@ -31,9 +31,11 @@ const offerDismissed = () => {
 };
 
 function UnlockScreen() {
-  const { unlock, verifyMaster, unlockWithPasskey, enrollPasskey, passkeys, biometrics, lockedByUser, toast } = useVault();
+  const { unlock, verifyMaster, unlockWithPasskey, enrollPasskey, passkeys, biometrics, devicePasskey, lockedByUser, toast } = useVault();
+  // Con passkeys de otros dispositivos se ofrece el botón (puede estar sincronizada), pero no se abre con él
   const hasPasskey = biometrics.supported && passkeys.length > 0;
-  const [mode, setMode] = useState<"passkey" | "master" | "offer">(hasPasskey ? "passkey" : "master");
+  const onDevice = biometrics.supported && !!devicePasskey;
+  const [mode, setMode] = useState<"passkey" | "master" | "offer">(onDevice ? "passkey" : "master");
   const [pw, setPw] = useState("");
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -55,17 +57,17 @@ function UnlockScreen() {
   // Lanza el prompt una sola vez al aparecer la pantalla (no si el usuario acaba de bloquear a mano).
   // Si el navegador exige un gesto, falla en silencio y queda el botón.
   useEffect(() => {
-    if (!hasPasskey || lockedByUser || tried.current) return;
+    if (!onDevice || lockedByUser || tried.current) return;
     tried.current = true;
     withPasskey();
-  }, [hasPasskey, lockedByUser, withPasskey]);
+  }, [onDevice, lockedByUser, withPasskey]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     setErr(null);
     try {
-      if (biometrics.supported && passkeys.length === 0 && !offerDismissed()) {
+      if (biometrics.supported && !devicePasskey && !offerDismissed()) {
         await verifyMaster(pw);
         setMode("offer");
       } else {
