@@ -33,6 +33,20 @@
     setLang(root.lang === "es" ? "en" : "es");
   });
 
+  // ── Video: la vista previa abre un modal; sin JS el enlace lleva al archivo ──
+  var modal = document.getElementById("promo-modal");
+  var opener = document.getElementById("promo-open");
+  if (video && modal && opener && modal.showModal) {
+    opener.addEventListener("click", function (e) {
+      e.preventDefault();
+      modal.showModal();
+      video.play();
+    });
+    document.getElementById("promo-close").addEventListener("click", function () { modal.close(); });
+    modal.addEventListener("click", function (e) { if (e.target === modal) modal.close(); });
+    modal.addEventListener("close", function () { video.pause(); });
+  }
+
   // ── Aparición al hacer scroll ──
   var items = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window) {
