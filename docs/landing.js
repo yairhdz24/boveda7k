@@ -27,7 +27,9 @@
   try {
     saved = localStorage.getItem("bv-landing-lang");
   } catch (e) {}
-  var initial = saved || (/^es/i.test(navigator.language || "") ? "es" : "en");
+  // Sin elección guardada manda el idioma del dispositivo: español si es su primera preferencia, inglés para todo lo demás.
+  var device = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+  var initial = saved || (/^es/i.test(device) ? "es" : "en");
   if (initial !== "es") setLang(initial);
   button.addEventListener("click", function () {
     setLang(root.lang === "es" ? "en" : "es");
@@ -143,6 +145,11 @@
     es: { empty: "Este cliente aún no tiene credenciales. Crea la primera con «Nueva».", saved: "Cifrada y guardada", client: "Cliente creado", newClient: "Cliente", clientName: "Nombre del cliente", userHint: "usuario@ejemplo.example", copied: "copiada", user: "Usuario copiado", pass: "Contraseña copiada", none: "Sin resultados. Prueba con «gmail» o «hosting».", placeholder: "Busca: supa, gmail, hosting…" },
     en: { empty: "This client has no credentials yet. Add the first one with “New”.", saved: "Encrypted and saved", client: "Client created", newClient: "Client", clientName: "Client name", userHint: "user@example.example", copied: "copied", user: "Username copied", pass: "Password copied", none: "No results. Try “gmail” or “hosting”.", placeholder: "Search: supa, gmail, hosting…" },
   };
+  // Títulos de las credenciales de ejemplo en inglés; las que crea el visitante se quedan como las escribió.
+  var TITLES_EN = {"Cuenta principal del negocio": "Main business account", "Hosting y dominio": "Hosting and domain", "Administrador del sitio": "Site admin", "Correo de recepción": "Front desk email", "Panel de citas": "Booking panel", "Sitio y DNS": "Site and DNS", "Proyecto de producción": "Production project", "Postgres directo": "Direct Postgres", "Organización del estudio": "Studio organization", "Despliegues": "Deployments", "Página del negocio": "Business page", "Cobros en línea": "Online payments", "Hosting del menú": "Menu hosting"};
+  function titleOf(cred) {
+    return (lang() === "en" && TITLES_EN[cred.title]) || cred.title;
+  }
   var CLIENTS = [
     { id: "cn", name: "Café Nómada", creds: [
       { title: "Cuenta principal del negocio", service: "Gmail / Google Workspace", user: "hola@cafenomada.example" },
@@ -228,7 +235,7 @@
       logo.style.background = colorOf(cred.service);
     }
     var names = el("div");
-    names.appendChild(el("div", "demo-title", cred.title));
+    names.appendChild(el("div", "demo-title", titleOf(cred)));
     names.appendChild(el("div", "demo-sub", clientName ? cred.service + " · " + clientName : cred.service));
     head.appendChild(logo);
     head.appendChild(names);
@@ -236,7 +243,7 @@
     var user = el("span", "demo-user", cred.user);
     var eye = el("button", "demo-btn");
     eye.type = "button";
-    eye.setAttribute("aria-label", "Ver contraseña");
+    eye.setAttribute("aria-label", lang() === "en" ? "Show password" : "Ver contraseña");
     eye.appendChild(icon("i-eye"));
     eye.addEventListener("click", function () {
       user.textContent = cred.secret || fakeSecret(cred.title + cred.user);
@@ -246,12 +253,12 @@
     });
     var copyUser = el("button", "demo-btn");
     copyUser.type = "button";
-    copyUser.setAttribute("aria-label", "Copiar usuario");
+    copyUser.setAttribute("aria-label", lang() === "en" ? "Copy username" : "Copiar usuario");
     copyUser.appendChild(icon("i-user"));
     copyUser.addEventListener("click", function () { say(TEXT[lang()].user); });
     var copyPass = el("button", "demo-btn demo-key");
     copyPass.type = "button";
-    copyPass.setAttribute("aria-label", "Copiar contraseña");
+    copyPass.setAttribute("aria-label", lang() === "en" ? "Copy password" : "Copiar contraseña");
     copyPass.appendChild(icon("i-key"));
     copyPass.addEventListener("click", function () { copyPass.classList.remove("is-pulse"); say(TEXT[lang()].pass); });
     foot.appendChild(user);
@@ -270,7 +277,7 @@
     CLIENTS.forEach(function (cl) {
       cl.creds.forEach(function (cr) {
         if (q) {
-          if ((cr.title + " " + cr.service + " " + cr.user + " " + cl.name).toLowerCase().indexOf(q) !== -1) rows.push([cr, cl.name]);
+          if ((titleOf(cr) + " " + cr.title + " " + cr.service + " " + cr.user + " " + cl.name).toLowerCase().indexOf(q) !== -1) rows.push([cr, cl.name]);
         } else if (cl.id === current) rows.push([cr, null]);
       });
     });

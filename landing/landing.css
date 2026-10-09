@@ -37,6 +37,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Las piezas en 3D (tarjetas, abanico, capas) sobresalen de su caja; se recortan aquí para que el móvil no tenga scroll lateral. */
+main { overflow-x: clip; }
+@supports not (overflow: clip) { body { overflow-x: hidden; } }
+
 /* ── Aparición al hacer scroll (solo si corre el script: sin JS todo se ve) ── */
 .js .reveal {
   opacity: 0;
@@ -1243,4 +1247,20 @@ body {
   .demo-btn.is-pulse {
     animation: none;
   }
+}
+@media (max-width: 639px) {
+  .fan-l { transform: translateX(-100%) rotate(-8deg) scale(0.86); }
+  .fan-r { transform: translateX(0%) rotate(8deg) scale(0.86); }
+  .fan:hover .fan-l { transform: translateX(-104%) rotate(-10deg) scale(0.88); }
+  .fan:hover .fan-r { transform: translateX(4%) rotate(10deg) scale(0.88); }
+}
+.demo-search { min-width: 0; }
+@media (max-width: 639px) {
+  .demo-bar { gap: 0.6rem; padding: 0.75rem; }
+  .demo-search kbd { display: none; }
+  .demo-new { padding: 0 0.95rem; }
+}
+@media (max-width: 479px) {
+  .iso-wrap { height: 440px; }
+  .iso { scale: 0.74; margin-top: 90px; }
 }
