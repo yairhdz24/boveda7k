@@ -13,7 +13,7 @@ Encrypted before they leave your browser.
 ![Supabase](https://img.shields.io/badge/Supabase-Postgres%20%2B%20Auth-3ecf8e?logo=supabase&logoColor=white)
 ![End-to-end encrypted](https://img.shields.io/badge/encryption-end--to--end-3ee58c)
 
-**[Website](https://yairhdz24.github.io/boveda7k/)** · **[Watch the 40-second video](https://yairhdz24.github.io/boveda7k/#top)** · **English** · [Español](README.es.md)
+**[Website](https://getboveda.vercel.app/)** · **[Watch the 40-second video](https://getboveda.vercel.app/#top)** · **English** · [Español](README.es.md)
 
 <img src="docs/screenshots/client-drawer.png" alt="A credential opened in the side panel" width="100%" />
 

@@ -13,7 +13,7 @@ Cifradas antes de salir de tu navegador.
 ![Supabase](https://img.shields.io/badge/Supabase-Postgres%20%2B%20Auth-3ecf8e?logo=supabase&logoColor=white)
 ![Cifrado de extremo a extremo](https://img.shields.io/badge/cifrado-extremo%20a%20extremo-3ee58c)
 
-**[Sitio web](https://yairhdz24.github.io/boveda7k/)** · **[Mira el video de 40 segundos](https://yairhdz24.github.io/boveda7k/#top)** · [English](README.md) · **Español**
+**[Sitio web](https://getboveda.vercel.app/)** · **[Mira el video de 40 segundos](https://getboveda.vercel.app/#top)** · [English](README.md) · **Español**
 
 <img src="docs/screenshots/client-drawer.png" alt="Detalle de una credencial en el panel lateral" width="100%" />
 
