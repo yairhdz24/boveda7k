@@ -65,6 +65,8 @@ export function Shell({ children }: { children: ReactNode }) {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
+        // Con el panel lateral abierto (modal) el buscador quedaría sin foco ni clics
+        if (document.querySelector('[role="dialog"][data-state="open"]')) return;
         setPaletteOpen(true);
       }
     };

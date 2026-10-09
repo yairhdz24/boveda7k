@@ -75,7 +75,7 @@ flowchart LR
 
 - **Todo se cifra en el navegador.** Supabase solo guarda texto cifrado: ni la base, ni un respaldo filtrado, ni la service role pueden leer tus contraseñas.
 - **La llave de datos (DEK) vive solo en memoria** y no es extraíble. Cambiar la contraseña maestra solo vuelve a envolver la DEK; no hay que recifrar nada.
-- **La biometría no es un atajo inseguro.** Cada dispositivo registra una passkey; al verificarte, el autenticador entrega un secreto del que se deriva una llave que envuelve la misma DEK. Sin el dispositivo y tu huella o rostro, esa copia no sirve. Revocar un dispositivo borra su copia.
+- **La biometría no es un atajo inseguro.** Cada dispositivo registra una passkey; al verificarte, el autenticador entrega un secreto del que se deriva una llave que envuelve la misma DEK. Sin el dispositivo y tu huella o rostro, esa copia no sirve. Revocar un dispositivo borra su copia del servidor.
 - **Si olvidas la contraseña maestra no hay recuperación.** Guárdala fuera de la app.
 - **Lo que no se cifra** (para poder listar y filtrar): nombre, sitio y notas del cliente, nombre del servicio, y título, entorno y URL de acceso de la credencial. No pongas secretos ahí.
 - **RLS en todas las tablas**: cada usuario solo ve lo suyo.
@@ -138,7 +138,7 @@ El desbloqueo biométrico queda ligado al dominio. Si cambias de dominio, entra 
 | Safari 18+ (macOS 15, iOS 18) | Touch ID y Face ID |
 | Chrome y Edge 116+ (macOS, Windows) | Touch ID y Windows Hello |
 | Chrome en Android | Huella |
-| Navegadores sin la extensión PRF | No se ofrece; la contraseña maestra funciona igual |
+| Navegadores sin la extensión PRF | No disponible; la contraseña maestra funciona igual |
 
 ## Estructura del proyecto
 

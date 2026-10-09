@@ -51,8 +51,8 @@ Biometric unlock adds a second wrapping of the same DEK. It does not store the m
 - The wrapped DEK is stored in `vault_passkeys`. Without the authenticator and its user verification, the row is useless.
 - **The WebAuthn challenge is generated in the client and the assertion is not verified by a server.** That is deliberate: the passkey is not used to authenticate to anything. The security boundary is the PRF secret, which only the authenticator can produce. Supabase Auth still gates access to the rows.
 - Registering a device requires the master password, because wrapping needs an extractable copy of the DEK. That copy exists only for the duration of the enrollment.
-- Revoking a device deletes its row. The passkey left on the device can no longer unwrap anything.
-- Browsers without a user-verifying platform authenticator or without PRF are simply not offered the option.
+- Revoking a device deletes its row, so the passkey left on the device has nothing to unwrap. Revoking does **not** rotate the DEK: someone who had already copied that row *and* controls the device could still unwrap their copy. If a device was stolen while its vault could be opened, rotate the credentials it had access to.
+- Browsers without a user-verifying platform authenticator are not offered the option. Some browsers cannot tell in advance whether PRF is available; there the option is offered once, enrollment fails with a clear message, and it is not offered again.
 
 A consequence worth knowing: someone who can pass your device's biometric check, or knows the device passcode where the platform accepts it as a fallback, can unlock the vault on that device while your Supabase session is active. Sign out on shared machines.
 

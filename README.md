@@ -77,7 +77,7 @@ flowchart LR
 
 - **Everything is encrypted in the browser.** Supabase only stores ciphertext: not the database, not a leaked backup, not the service role can read your passwords.
 - **The data key (DEK) lives only in memory** and is non-extractable. Changing the master password only re-wraps the DEK; nothing is re-encrypted.
-- **Biometrics are not an insecure shortcut.** Each device registers a passkey; when you verify, the authenticator releases a secret from which a key is derived to wrap the same DEK. Without the device and your fingerprint or face, that copy is useless. Revoking a device deletes its copy.
+- **Biometrics are not an insecure shortcut.** Each device registers a passkey; when you verify, the authenticator releases a secret from which a key is derived to wrap the same DEK. Without the device and your fingerprint or face, that copy is useless. Revoking a device deletes its copy from the server.
 - **There is no recovery if you forget the master password.** Store it outside the app.
 - **What is not encrypted** (so it can be listed and filtered): the client's name, website and notes, the service name, and the credential's title, environment and login URL. Do not put secrets there.
 - **RLS on every table**: each user only sees their own rows.
@@ -140,7 +140,7 @@ Biometric unlock is bound to the domain. If you change domains, sign in with you
 | Safari 18+ (macOS 15, iOS 18) | Touch ID and Face ID |
 | Chrome and Edge 116+ (macOS, Windows) | Touch ID and Windows Hello |
 | Chrome on Android | Fingerprint |
-| Browsers without the PRF extension | Not offered; the master password works as usual |
+| Browsers without the PRF extension | Not available; the master password works as usual |
 
 ## Project structure
 

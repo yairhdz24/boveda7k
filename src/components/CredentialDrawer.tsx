@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 import { ArrowUpRight, ExternalLink, Pencil, Trash2, X } from "lucide-react";
 import type { Credential, Service } from "@/lib/types";
 import { Badge, Button, IconButton, LogoTile, SecretField } from "@/components/ui";
@@ -30,10 +30,9 @@ const section = "grid gap-2";
 /** Panel lateral con el detalle de una credencial. Se abre cuando `credential` no es null. */
 export function CredentialDrawer({ credential, service, via, usedBy, onClose, onEdit, onDelete, onJump }: Props) {
   // Se conserva lo último mostrado para que el contenido no desaparezca durante la animación de cierre
-  const [shown, setShown] = useState<Shown | null>(null);
-  useEffect(() => {
-    if (credential) setShown({ credential, service, via, usedBy });
-  }, [credential, service, via, usedBy]);
+  const last = useRef<Shown | null>(null);
+  if (credential) last.current = { credential, service, via, usedBy };
+  const shown = last.current;
 
   const c = shown?.credential;
   const linked = shown?.via && shown.via !== "missing" ? shown.via : undefined;

@@ -62,12 +62,13 @@ export function VaultProvider({ children }: { children: ReactNode }) {
   const clipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    // Si la migración de passkeys aún no está aplicada, la bóveda abre igual con contraseña maestra
-    Promise.all([getVaultKey(), listPasskeys().catch(() => [] as PasskeyRecord[]), passkeySupport()])
+    // Si las passkeys no se pueden leer (migración sin aplicar, red caída), la bóveda abre igual con
+    // contraseña maestra y no se ofrece biometría: registrar a ciegas dejaría passkeys huérfanas
+    Promise.all([getVaultKey(), listPasskeys().catch(() => null), passkeySupport()])
       .then(([r, pk, supported]) => {
         setRecord(r);
-        setPasskeys(pk);
-        setBiometrics({ supported, name: biometricName() });
+        setPasskeys(pk ?? []);
+        setBiometrics({ supported: supported && pk !== null, name: biometricName() });
         setDeviceId(readDevice());
         setStatus(r ? "locked" : "setup");
       })
@@ -138,7 +139,7 @@ export function VaultProvider({ children }: { children: ReactNode }) {
     const { credentialId, secret } = await assertPasskey(passkeys);
     const row = passkeys.find((p) => p.credential_id === credentialId);
     if (!row) throw new PasskeyUnlockError();
-    const k = await unwrapDekWithSecret(secret, row, credentialId);
+    const k = await unwrapDekWithSecret(secret, row, credentialId).finally(() => secret.fill(0));
     setDek(k);
     setStatus("unlocked");
     writeDevice(credentialId);
@@ -154,7 +155,7 @@ export function VaultProvider({ children }: { children: ReactNode }) {
       // Para envolverla hace falta la DEK extraíble: por eso se pide la contraseña maestra
       const extractable = await unlockVault(master, record, true);
       const { credentialId, prfSalt, secret } = await registerPasskey(await currentUser(), passkeys);
-      const wrap = await wrapDekWithSecret(extractable, secret, credentialId);
+      const wrap = await wrapDekWithSecret(extractable, secret, credentialId).finally(() => secret.fill(0));
       const row = await savePasskey({ credential_id: credentialId, prf_salt: prfSalt, ...wrap, label: deviceLabel() });
       setPasskeys((p) => [...p, row]);
       writeDevice(credentialId);

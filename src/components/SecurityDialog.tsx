@@ -54,7 +54,7 @@ export function SecurityDialog({ open, onClose }: { open: boolean; onClose: () =
     <Dialog open={open} onClose={close} title="Seguridad">
       <div className="grid gap-4">
         <p className="m-0 text-muted-foreground">
-          Dispositivos que pueden abrir tu bóveda con biometría. Cada uno guarda su propia llave cifrada; revocarlo aquí la invalida. Tu contraseña maestra siempre funciona.
+          Dispositivos que pueden abrir tu bóveda con biometría. Cada uno guarda su propia llave cifrada; revocarlo aquí la borra. Tu contraseña maestra siempre funciona.
         </p>
         {passkeys.length === 0 ? (
           <p className="m-0 text-faint">Aún no hay dispositivos registrados.</p>

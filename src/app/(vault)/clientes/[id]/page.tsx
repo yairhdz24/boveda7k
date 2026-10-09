@@ -214,7 +214,11 @@ export default function ClientPage() {
         service={serviceById(current?.service_id ?? null)}
         via={current ? viaOf(current) : undefined}
         usedBy={current ? usedBy.get(current.id) : undefined}
-        onClose={() => setSelected(null)}
+        onClose={() => {
+          setSelected(null);
+          // Sin el hash de ⌘K, recargar o desbloquear no reabre el panel
+          if (location.hash.startsWith("#c-")) history.replaceState(null, "", location.pathname);
+        }}
         onEdit={(c) => { setSelected(null); setCredDialog({ open: true, credential: c }); }}
         onDelete={(c) => { setSelected(null); setToDelete(c); }}
         onJump={setSelected}

@@ -92,7 +92,11 @@ function UnlockScreen() {
         try { localStorage.setItem(OFFER_KEY, "no"); } catch { /* sin almacenamiento */ }
       }
     } catch (e) {
-      if (!(e instanceof PasskeyCancelledError)) toast((e as Error).message, "error");
+      if (!(e instanceof PasskeyCancelledError)) {
+        // Si este dispositivo no puede (sin PRF, ya registrado…), no se vuelve a ofrecer: queda en Seguridad
+        try { localStorage.setItem(OFFER_KEY, "no"); } catch { /* sin almacenamiento */ }
+        toast((e as Error).message, "error");
+      }
     }
     try {
       await unlock(pw);
