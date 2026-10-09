@@ -1,6 +1,13 @@
 {
   "name": "boveda",
   "version": "0.1.0",
+  "description": "Las credenciales de todos tus clientes en un solo lugar, cifradas de extremo a extremo.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yairhdz24/boveda7k.git"
+  },
+  "homepage": "https://github.com/yairhdz24/boveda7k#readme",
   "private": true,
   "scripts": {
     "dev": "next dev",

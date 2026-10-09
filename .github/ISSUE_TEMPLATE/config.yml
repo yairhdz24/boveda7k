@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability / Vulnerabilidad de seguridad
+    url: https://github.com/yairhdz24/boveda7k/security/advisories/new
+    about: Report it privately. Do not open a public issue. / Repórtala en privado, no abras un issue público.

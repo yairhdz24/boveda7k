@@ -1,0 +1,27 @@
+name: Feature request / Propuesta
+description: Suggest an improvement. / Propón una mejora.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does it solve? / ¿Qué problema resuelve?
+      description: Describe the situation, not the solution. / Describe la situación, no la solución.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal / Propuesta
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered / Alternativas consideradas
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Contribution / Contribución
+      options:
+        - label: I can open a pull request for this. / Puedo abrir un PR.

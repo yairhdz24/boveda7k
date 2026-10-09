@@ -1,0 +1,45 @@
+name: Bug report / Reporte de error
+description: Something is not working as expected. / Algo no funciona como debería.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If this could expose credentials or weaken the encryption, stop and report it privately instead (see SECURITY.md).
+        Never paste real credentials, keys or project URLs here.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened? / ¿Qué pasó?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce / Pasos para reproducir
+      placeholder: "1. …\n2. …"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect? / ¿Qué esperabas?
+  - type: input
+    id: env
+    attributes:
+      label: Browser and OS / Navegador y sistema
+      placeholder: Safari 18.2 on macOS 15
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area / Área
+      options:
+        - Unlock (master password) / Desbloqueo (contraseña maestra)
+        - Biometric unlock / Desbloqueo biométrico
+        - Credentials / Credenciales
+        - Clients or services / Clientes o servicios
+        - Search (⌘K) / Buscador
+        - Setup or deployment / Instalación o despliegue
+        - Other / Otro
