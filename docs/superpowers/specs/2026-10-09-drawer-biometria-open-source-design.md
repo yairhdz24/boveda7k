@@ -132,6 +132,15 @@ Safari 18+ en macOS 15 e iOS 18, Chrome y Edge 116+ con Touch ID o Windows Hello
 - **No se publica**: `.env.local`, `.vercel`, la referencia o URL del proyecto Supabase de Yair, ni datos reales. Hoy ya es así; se añade una revisión final con `git grep` de la referencia del proyecto antes de cerrar.
 - **Sí se publica**: `supabase/migrations/0001` y `0002`, genéricas, y un script de datos de ejemplo.
 
+### Posicionamiento (nicho)
+
+El README abre con la historia, no con el stack. Público: freelancers y agencias pequeñas que manejan accesos de muchos clientes.
+
+- **Dolor**: tienes muchos clientes y demasiados accesos; terminas con una nota por cliente, contraseñas perdidas en chats de WhatsApp y correos viejos, y cada vez que necesitas entrar a algo pierdes minutos buscando.
+- **Giro**: Bóveda hace lo contrario. Creas al cliente, le vas enlazando las cuentas de cualquier servicio (Gmail, hosting, base de datos, servidor, Tag Manager) y cualquier credencial queda a un atajo de teclado, cifrada de extremo a extremo.
+- **Mensaje central**: "Las credenciales de todos tus clientes, en un solo lugar y a un atajo de distancia. Cifradas antes de salir de tu navegador."
+- Sección "Antes / Con Bóveda" en dos columnas justo debajo del hero, y los mismos textos en la descripción del repositorio y en `package.json`.
+
 ### Archivos
 
 - `README.md` (inglés) y `README.es.md`, enlazados entre sí. Estructura: hero con logo y captura principal, insignias (licencia, CI, stack), por qué existe, galería de capturas, características, modelo de seguridad con diagrama Mermaid (incluida la biometría), inicio rápido en 5 pasos, despliegue, estructura del proyecto, roadmap, cómo contribuir, licencia.
