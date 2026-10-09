@@ -48,6 +48,18 @@ export type CredentialSecret = { fields: SecretField[]; notes?: string; via?: st
 
 export type Credential = Omit<CredentialRow, "payload"> & { secret: CredentialSecret | null; decryptError?: boolean };
 
+/** Una passkey registrada: la DEK envuelta con la llave de ese dispositivo. */
+export type PasskeyRecord = {
+  id: string;
+  credential_id: string;
+  prf_salt: string;
+  wrapped_key: string;
+  wrap_iv: string;
+  label: string;
+  created_at: string;
+  last_used_at: string | null;
+};
+
 export const ENV_LABEL: Record<Env, string> = { prod: "Producción", staging: "Staging", dev: "Dev" };
 
 export const KIND_LABEL: Record<ServiceKind, string> = {

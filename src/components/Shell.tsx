@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { Blocks, Copy, KeyRound, LayoutGrid, Lock, LogOut, Menu, Moon, Plus, Search, Sun } from "lucide-react";
+import { Blocks, Copy, Fingerprint, KeyRound, LayoutGrid, Lock, LogOut, Menu, Moon, Plus, Search, Sun } from "lucide-react";
 import { currentEmail, listClients, listCredentials, listServices, signOut } from "@/lib/data";
 import { useDek, useVault } from "@/lib/vault";
 import type { Client, Credential, Service } from "@/lib/types";
 import { IconButton, LogoTile } from "@/components/ui";
 import { ClientDialog } from "@/components/forms/ClientDialog";
+import { SecurityDialog } from "@/components/SecurityDialog";
 
 type DataCtx = {
   clients: Client[];
@@ -34,6 +35,7 @@ export function Shell({ children }: { children: ReactNode }) {
   const [navOpen, setNavOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [newClientOpen, setNewClientOpen] = useState(false);
+  const [securityOpen, setSecurityOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [email, setEmail] = useState("");
 
@@ -142,6 +144,7 @@ export function Shell({ children }: { children: ReactNode }) {
             </div>
             <div className="vault-actions">
               <IconButton label={theme === "dark" ? "Tema Día" : "Tema Noche"} onClick={toggleTheme}>{theme === "dark" ? <Sun /> : <Moon />}</IconButton>
+              <IconButton label="Seguridad y dispositivos" onClick={() => setSecurityOpen(true)}><Fingerprint /></IconButton>
               <IconButton label="Bloquear bóveda" onClick={lock}><Lock /></IconButton>
               <IconButton label="Cerrar sesión" onClick={async () => { lock(); await signOut(); }}><LogOut /></IconButton>
             </div>
@@ -161,6 +164,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
       <ClientDialog open={newClientOpen} onClose={() => setNewClientOpen(false)} />
+      <SecurityDialog open={securityOpen} onClose={() => setSecurityOpen(false)} />
     </Ctx.Provider>
   );
 }

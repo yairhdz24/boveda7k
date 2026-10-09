@@ -4,6 +4,7 @@
  *  contraseña maestra ──PBKDF2-SHA256 (600k)──▶ KEK (AES-256-GCM, solo wrap/unwrap)
  *  DEK aleatoria (AES-256-GCM) ──envuelta con KEK──▶ vault_keys.wrapped_key
  *  cada credencial ──AES-GCM con DEK, AAD = id de la credencial──▶ credentials.payload
+ *  passkey (PRF) ──HKDF-SHA256──▶ KEK del dispositivo ──envuelve la misma DEK──▶ vault_passkeys
  *
  * La DEK solo existe en memoria mientras la bóveda está desbloqueada y es no extraíble.
  */
@@ -91,6 +92,59 @@ export async function rewrapVault(oldMaster: string, newMaster: string, record: 
   const kek = await deriveKek(newMaster, salt, KDF_ITERATIONS);
   const wrapped = await crypto.subtle.wrapKey("raw", dek, kek, { name: "AES-GCM", iv, additionalData: WRAP_AAD });
   return { kdf_salt: toB64(salt), kdf_iterations: KDF_ITERATIONS, wrapped_key: toB64(wrapped), wrap_iv: toB64(iv) };
+}
+
+/* ── Desbloqueo biométrico (passkey + PRF) ──────────────────────
+ *  secreto PRF (32 B) ──HKDF-SHA256──▶ KEK del dispositivo
+ *  la misma DEK ──envuelta con esa KEK──▶ vault_passkeys.wrapped_key
+ */
+export type PasskeyWrap = { wrapped_key: string; wrap_iv: string };
+
+const PASSKEY_INFO = enc.encode("boveda:passkey-kek:v1");
+const passkeyAad = (credentialId: string) => enc.encode(`boveda:dek:passkey:v1:${credentialId}`);
+
+async function derivePasskeyKek(secret: Uint8Array<ArrayBuffer>): Promise<CryptoKey> {
+  const base = await crypto.subtle.importKey("raw", secret, "HKDF", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey(
+    { name: "HKDF", hash: "SHA-256", salt: new Uint8Array(new ArrayBuffer(32)), info: PASSKEY_INFO },
+    base,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["wrapKey", "unwrapKey"],
+  );
+}
+
+/** Envuelve la DEK (debe ser extraíble) para una passkey concreta. */
+export async function wrapDekWithSecret(dek: CryptoKey, secret: Uint8Array<ArrayBuffer>, credentialId: string): Promise<PasskeyWrap> {
+  const iv = randomBytes(12);
+  const kek = await derivePasskeyKek(secret);
+  const wrapped = await crypto.subtle.wrapKey("raw", dek, kek, { name: "AES-GCM", iv, additionalData: passkeyAad(credentialId) });
+  return { wrapped_key: toB64(wrapped), wrap_iv: toB64(iv) };
+}
+
+/** Abre la DEK con el secreto de la passkey: lanza PasskeyUnlockError si no corresponde. */
+export async function unwrapDekWithSecret(secret: Uint8Array<ArrayBuffer>, wrap: PasskeyWrap, credentialId: string): Promise<CryptoKey> {
+  try {
+    const kek = await derivePasskeyKek(secret);
+    return await crypto.subtle.unwrapKey(
+      "raw",
+      fromB64(wrap.wrapped_key),
+      kek,
+      { name: "AES-GCM", iv: fromB64(wrap.wrap_iv), additionalData: passkeyAad(credentialId) },
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["encrypt", "decrypt"],
+    );
+  } catch {
+    throw new PasskeyUnlockError();
+  }
+}
+
+export class PasskeyUnlockError extends Error {
+  constructor() {
+    super("No encontramos la llave de este dispositivo. Usa tu contraseña maestra.");
+    this.name = "PasskeyUnlockError";
+  }
 }
 
 export async function encryptJSON(dek: CryptoKey, data: unknown, aad: string): Promise<EncryptedPayload> {

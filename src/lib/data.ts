@@ -3,7 +3,7 @@
 import { supabaseBrowser } from "./supabase/client";
 import { decryptJSON, encryptJSON, type VaultKeyRecord } from "./crypto";
 import { SERVICE_PRESETS } from "./presets";
-import type { Client, Credential, CredentialRow, CredentialSecret, Env, Service, ServiceKind } from "./types";
+import type { Client, Credential, CredentialRow, CredentialSecret, Env, PasskeyRecord, Service, ServiceKind } from "./types";
 
 const db = () => supabaseBrowser();
 
@@ -23,6 +23,21 @@ export async function saveVaultKey(record: VaultKeyRecord) {
 export async function replaceVaultKey(record: VaultKeyRecord) {
   const { data: { user } } = await db().auth.getUser();
   check(await db().from("vault_keys").update(record).eq("owner_id", user!.id));
+}
+
+/* ── Passkeys (desbloqueo biométrico) ───────────────────────── */
+const PASSKEY_COLS = "id,credential_id,prf_salt,wrapped_key,wrap_iv,label,created_at,last_used_at";
+export async function listPasskeys(): Promise<PasskeyRecord[]> {
+  return check(await db().from("vault_passkeys").select(PASSKEY_COLS).order("created_at"));
+}
+export async function savePasskey(input: Pick<PasskeyRecord, "credential_id" | "prf_salt" | "wrapped_key" | "wrap_iv" | "label">): Promise<PasskeyRecord> {
+  return check(await db().from("vault_passkeys").insert(input).select(PASSKEY_COLS).single());
+}
+export async function deletePasskey(id: string) {
+  check(await db().from("vault_passkeys").delete().eq("id", id));
+}
+export async function touchPasskey(id: string) {
+  check(await db().from("vault_passkeys").update({ last_used_at: new Date().toISOString() }).eq("id", id));
 }
 
 /* ── Clientes ───────────────────────────────────────────────── */
@@ -126,6 +141,11 @@ export async function uploadLogo(file: File): Promise<string> {
 export async function currentEmail(): Promise<string> {
   const { data } = await db().auth.getUser();
   return data.user?.email ?? "";
+}
+export async function currentUser(): Promise<{ id: string; email: string }> {
+  const { data } = await db().auth.getUser();
+  if (!data.user) throw new Error("Sesión no encontrada.");
+  return { id: data.user.id, email: data.user.email ?? "" };
 }
 export async function signOut() {
   await db().auth.signOut();
