@@ -122,6 +122,8 @@
   var input = document.getElementById("demo-q");
   var toast = document.getElementById("demo-toast");
   var SVG = "http://www.w3.org/2000/svg";
+  // Logos oficiales, servidos desde este mismo sitio (docs/media/brands): la landing no pide nada a terceros.
+  var LOGOS = { "Gmail / Google Workspace": "gmail", Hostinger: "hostinger", WordPress: "wordpress", Instagram: "instagram", Calendly: "calendly", Cloudflare: "cloudflare", Supabase: "supabase", GitHub: "github", Vercel: "vercel", "Meta Business": "meta", Stripe: "stripe" };
   var COLORS = ["#3ee58c", "#7cc7ff", "#ffb86b", "#c6a4ff", "#ff9bb3", "#f4e58a"];
   var TEXT = {
     es: { copied: "copiada", user: "Usuario copiado", pass: "Contraseña copiada", none: "Sin resultados. Prueba con «gmail» o «hosting».", placeholder: "Busca: supa, gmail, hosting…" },
@@ -199,8 +201,18 @@
     var c = el("article", "demo-card");
     c.style.setProperty("--i", i);
     var head = el("div", "demo-head");
-    var logo = el("span", "demo-logo", cred.service[0]);
-    logo.style.background = colorOf(cred.service);
+    var logo;
+    if (LOGOS[cred.service]) {
+      logo = el("span", "demo-logo is-brand");
+      var img = document.createElement("img");
+      img.src = "media/brands/" + LOGOS[cred.service] + ".svg";
+      img.alt = "";
+      img.loading = "lazy";
+      logo.appendChild(img);
+    } else {
+      logo = el("span", "demo-logo", cred.service[0]);
+      logo.style.background = colorOf(cred.service);
+    }
     var names = el("div");
     names.appendChild(el("div", "demo-title", cred.title));
     names.appendChild(el("div", "demo-sub", clientName ? cred.service + " · " + clientName : cred.service));
@@ -211,7 +223,7 @@
     var eye = el("button", "demo-btn");
     eye.type = "button";
     eye.setAttribute("aria-label", "Ver contraseña");
-    eye.appendChild(icon("i-lock"));
+    eye.appendChild(icon("i-eye"));
     eye.addEventListener("click", function () {
       user.textContent = fakeSecret(cred.title + cred.user);
       user.classList.add("is-secret");
@@ -221,7 +233,7 @@
     var copyUser = el("button", "demo-btn");
     copyUser.type = "button";
     copyUser.setAttribute("aria-label", "Copiar usuario");
-    copyUser.appendChild(icon("i-users"));
+    copyUser.appendChild(icon("i-user"));
     copyUser.addEventListener("click", function () { say(TEXT[lang()].user); });
     var copyPass = el("button", "demo-btn demo-key");
     copyPass.type = "button";
