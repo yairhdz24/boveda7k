@@ -31,10 +31,20 @@ async function assertPublic(u: URL) {
   if (addrs.some(isPrivate)) throw new Error("Host no permitido");
 }
 
+const MAX_REDIRECTS = 4;
+
+/** Las redirecciones se siguen a mano para validar cada salto: un sitio público no puede rebotar la petición a la red interna. */
 async function get(url: string, init?: RequestInit) {
-  const u = new URL(url);
-  await assertPublic(u);
-  return fetch(u, { ...init, headers: { "user-agent": UA, accept: "*/*" }, redirect: "follow", signal: AbortSignal.timeout(TIMEOUT) });
+  let u = new URL(url);
+  for (let hop = 0; ; hop++) {
+    await assertPublic(u);
+    const res = await fetch(u, { ...init, headers: { "user-agent": UA, accept: "*/*" }, redirect: "manual", signal: AbortSignal.timeout(TIMEOUT) });
+    const location = res.status >= 300 && res.status < 400 ? res.headers.get("location") : null;
+    if (!location) return { res, url: u.href };
+    await res.body?.cancel();
+    if (hop >= MAX_REDIRECTS) throw new Error("Demasiadas redirecciones");
+    u = new URL(location, u);
+  }
 }
 
 const attr = (tag: string, name: string) => tag.match(new RegExp(`${name}\\s*=\\s*["']([^"']+)["']`, "i"))?.[1];
@@ -47,7 +57,7 @@ function sizeOf(sizes: string | undefined, href: string) {
 
 async function isImage(url: string) {
   try {
-    const r = await get(url);
+    const { res: r } = await get(url);
     const type = r.headers.get("content-type") ?? "";
     await r.body?.cancel();
     return r.ok && (type.startsWith("image/") || type.includes("octet-stream"));
@@ -71,8 +81,8 @@ export async function GET(req: NextRequest) {
 
   const candidates: Candidate[] = [];
   try {
-    const res = await get(page.href);
-    const base = new URL(res.url || page.href);
+    const { res, url: finalUrl } = await get(page.href);
+    const base = new URL(finalUrl);
     const html = (await res.text()).slice(0, 400_000);
 
     for (const tag of html.match(/<link\b[^>]*>/gi) ?? []) {
@@ -86,7 +96,7 @@ export async function GET(req: NextRequest) {
       if (rel === "manifest") {
         try {
           const murl = new URL(href, base);
-          const m = (await (await get(murl.href)).json()) as { icons?: { src: string; sizes?: string }[] };
+          const m = (await (await get(murl.href)).res.json()) as { icons?: { src: string; sizes?: string }[] };
           for (const i of m.icons ?? []) candidates.push({ url: new URL(i.src, murl).href, size: sizeOf(i.sizes, i.src) });
         } catch { /* manifest roto: se ignora */ }
       }

@@ -13,7 +13,7 @@ Cifradas antes de salir de tu navegador.
 ![Supabase](https://img.shields.io/badge/Supabase-Postgres%20%2B%20Auth-3ecf8e?logo=supabase&logoColor=white)
 ![Cifrado de extremo a extremo](https://img.shields.io/badge/cifrado-extremo%20a%20extremo-3ee58c)
 
-[English](README.md) · **Español**
+**[Sitio web](https://yairhdz24.github.io/boveda7k/)** · **[Mira el video de 40 segundos](https://yairhdz24.github.io/boveda7k/#top)** · [English](README.md) · **Español**
 
 <img src="docs/screenshots/client-drawer.png" alt="Detalle de una credencial en el panel lateral" width="100%" />
 
@@ -79,6 +79,7 @@ flowchart LR
 - **Si olvidas la contraseña maestra no hay recuperación.** Guárdala fuera de la app.
 - **Lo que no se cifra** (para poder listar y filtrar): nombre, sitio y notas del cliente, nombre del servicio, y título, entorno y URL de acceso de la credencial. No pongas secretos ahí.
 - **RLS en todas las tablas**: cada usuario solo ve lo suyo.
+- **Endurecida de fábrica**: Content-Security-Policy estricta, HSTS, cero scripts de terceros y un buscador de íconos que rechaza redes privadas en cada redirección. Dependabot y CodeQL vigilan el repo.
 
 El modelo de amenazas completo y cómo reportar una vulnerabilidad están en [SECURITY.md](SECURITY.md).
 

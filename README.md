@@ -13,7 +13,7 @@ Encrypted before they leave your browser.
 ![Supabase](https://img.shields.io/badge/Supabase-Postgres%20%2B%20Auth-3ecf8e?logo=supabase&logoColor=white)
 ![End-to-end encrypted](https://img.shields.io/badge/encryption-end--to--end-3ee58c)
 
-**English** · [Español](README.es.md)
+**[Website](https://yairhdz24.github.io/boveda7k/)** · **[Watch the 40-second video](https://yairhdz24.github.io/boveda7k/#top)** · **English** · [Español](README.es.md)
 
 <img src="docs/screenshots/client-drawer.png" alt="A credential opened in the side panel" width="100%" />
 
@@ -81,6 +81,7 @@ flowchart LR
 - **There is no recovery if you forget the master password.** Store it outside the app.
 - **What is not encrypted** (so it can be listed and filtered): the client's name, website and notes, the service name, and the credential's title, environment and login URL. Do not put secrets there.
 - **RLS on every table**: each user only sees their own rows.
+- **Hardened by default**: strict Content-Security-Policy, HSTS, no third-party scripts, and an icon fetcher that refuses private networks on every redirect hop. Dependabot and CodeQL watch the repo.
 
 The full threat model and how to report a vulnerability are in [SECURITY.md](SECURITY.md).
 
@@ -160,6 +161,7 @@ src/app/tokens.css                     Bóveda Design System tokens
 src/app/tailwind.css                   Tailwind v4 wired to those tokens
 scripts/test-crypto.mts                encryption tests
 scripts/seed-demo.mts                  sample data
+docs/index.html + landing/             static landing page (GitHub Pages), no trackers
 ```
 
 ## Roadmap

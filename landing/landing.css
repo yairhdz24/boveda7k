@@ -1,0 +1,40 @@
+/*
+ * Estilos de la landing (docs/index.html). Tailwind v4 con los mismos tokens del Design System Bóveda.
+ * Se compila a docs/landing.css con `npm run landing:css`; la landing es estática y no carga nada de la app.
+ */
+@import "tailwindcss";
+@source "../docs/index.html";
+
+@theme {
+  --font-display: "Sora", system-ui, sans-serif;
+  --font-sans: "Manrope", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  --color-background: #070908;
+  --color-card: #0e1210;
+  --color-raised: #151a17;
+  --color-foreground: #eef5f0;
+  --color-muted-foreground: #9aa9a0;
+  --color-faint: #7f8d85;
+  --color-border: #1e2622;
+  --color-border-strong: #5f6e66;
+  --color-primary: #3ee58c;
+  --color-primary-foreground: #03140a;
+  --color-accent-soft: #0f2a1c;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--color-background); color: var(--color-foreground); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+
+/* Aparición al hacer scroll (solo si corre el script: sin JS todo se ve) */
+.js .reveal { opacity: 0; translate: 0 28px; transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), translate 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); transition-delay: var(--d, 0ms); }
+.js .reveal.in { opacity: 1; translate: 0 0; }
+
+@keyframes glow-drift { from { translate: -4% -3%; } to { translate: 5% 4%; } }
+.glow { animation: glow-drift 14s ease-in-out infinite alternate; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .reveal { opacity: 1; translate: none; transition: none; }
+  .glow { animation: none; }
+}
