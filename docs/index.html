@@ -25,23 +25,40 @@
   <link rel="stylesheet" href="landing.css" />
 </head>
 <body class="overflow-x-hidden">
-  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-    <div class="glow absolute -top-80 -left-60 size-[900px] rounded-full bg-[radial-gradient(circle,rgba(62,229,140,0.16),transparent_62%)]"></div>
-    <div class="glow absolute -right-80 top-[60vh] size-[900px] rounded-full bg-[radial-gradient(circle,rgba(62,229,140,0.09),transparent_62%)]"></div>
-  </div>
+  <!-- Íconos (trazos estilo Lucide) -->
+  <svg class="hidden" aria-hidden="true">
+    <defs>
+      <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+      <symbol id="i-finger" viewBox="0 0 24 24"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+      <symbol id="i-key" viewBox="0 0 24 24"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></symbol>
+      <symbol id="i-server" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 2.5l2.95 6.05 6.6.95-4.8 4.7 1.15 6.6L12 17.65 6.1 20.8l1.15-6.6-4.8-4.7 6.6-.95z"/></symbol>
+      <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+    </defs>
+  </svg>
 
-  <header class="sticky top-0 z-20 border-b border-border/60 bg-background/75 backdrop-blur-md">
-    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-5">
+  <header class="fixed inset-x-0 top-4 z-30 px-4">
+    <div class="mx-auto flex h-14 max-w-4xl items-center justify-between gap-3 rounded-full border border-border/80 bg-background/70 pr-2 pl-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl">
       <a href="#top" class="flex items-center gap-2.5">
-        <img src="media/icon.svg" alt="" class="size-8" />
+        <img src="media/icon.svg" alt="" class="size-7" />
         <span class="font-display text-lg font-bold tracking-tight">Bóveda</span>
       </a>
-      <nav class="flex items-center gap-2">
-        <a href="#funciones" class="hidden rounded-full px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground sm:block" data-en="Features">Funciones</a>
+      <nav class="flex items-center gap-1">
+        <a href="#demo" class="hidden rounded-full px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground sm:block">Demo</a>
+        <a href="#funciones" class="hidden rounded-full px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground md:block" data-en="Features">Funciones</a>
         <a href="#seguridad" class="hidden rounded-full px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground sm:block" data-en="Security">Seguridad</a>
-        <button id="lang" type="button" class="cursor-pointer rounded-full border border-border bg-transparent px-3 py-2 text-sm font-bold text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground" aria-label="Switch language">EN</button>
-        <a href="https://github.com/yairhdz24/boveda7k" rel="noopener" class="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-extrabold text-primary-foreground transition-transform hover:-translate-y-0.5">
-          <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.95 6.05 6.6.95-4.8 4.7 1.15 6.6L12 17.65 6.1 20.8l1.15-6.6-4.8-4.7 6.6-.95z"/></svg>
+        <a href="#instalar" class="hidden rounded-full px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground sm:block" data-en="Install">Instalar</a>
+        <button id="lang" type="button" class="cursor-pointer rounded-full border border-border bg-transparent px-3 py-1.5 text-sm font-bold text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground" aria-label="Switch language">EN</button>
+        <a href="https://github.com/yairhdz24/boveda7k" rel="noopener" class="flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-extrabold text-primary-foreground transition-transform hover:-translate-y-0.5">
+          <svg class="size-4"><use href="#i-star"/></svg>
           <span data-en="Star">Estrella</span>
         </a>
       </nav>
@@ -49,142 +66,244 @@
   </header>
 
   <main id="top">
-    <!-- Hero -->
-    <section class="mx-auto grid max-w-6xl items-center gap-12 px-5 pt-16 pb-20 lg:grid-cols-[1.15fr_0.85fr] lg:pt-24">
-      <div>
+    <!-- ═══ Hero ═══ -->
+    <section id="hero" class="relative overflow-hidden pt-36 pb-10 sm:pt-44">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+        <div class="glow absolute -top-72 left-1/2 -ml-[550px] size-[1100px] rounded-full bg-[radial-gradient(circle,rgba(62,229,140,0.2),transparent_60%)]"></div>
+        <div class="floor"></div>
+      </div>
+
+      <div class="mx-auto max-w-4xl px-5 text-center">
         <p class="reveal inline-flex items-center gap-2 rounded-full border border-primary/30 bg-accent-soft px-3.5 py-1.5 text-sm font-bold text-primary">
           <span class="size-2 rounded-full bg-primary"></span>
           <span data-en="Open source · MIT · self-hosted">Open source · MIT · autoalojada</span>
         </p>
-        <h1 class="reveal mt-6 font-display text-4xl leading-[1.05] font-bold tracking-tighter text-balance sm:text-6xl [--d:80ms]">
+        <h1 class="reveal mt-6 font-display text-[2.6rem] leading-[1.03] font-bold tracking-tighter text-balance sm:text-7xl [--d:80ms]">
           <span data-en="Every client's logins,">Los accesos de cada cliente,</span>
-          <span class="text-primary" data-en="one shortcut away.">a un atajo de distancia.</span>
+          <span class="bg-gradient-to-r from-primary to-[#b4ffd6] bg-clip-text text-transparent" data-en="one shortcut away.">a un atajo de distancia.</span>
         </h1>
-        <p class="reveal mt-6 max-w-xl text-lg leading-relaxed font-medium text-muted-foreground [--d:160ms]" data-en="You freelance. Every client comes with a Gmail, a hosting panel, a database and a server. Bóveda keeps them organized by client and encrypts everything in your browser before it leaves.">Eres freelance. Cada cliente trae su Gmail, su hosting, su base de datos y su servidor. Bóveda los organiza por cliente y cifra todo en tu navegador antes de que salga.</p>
-        <div class="reveal mt-9 flex flex-wrap items-center gap-3 [--d:240ms]">
-          <a href="https://github.com/yairhdz24/boveda7k" rel="noopener" class="flex items-center gap-2.5 rounded-full bg-primary px-6 py-3.5 font-extrabold text-primary-foreground shadow-[0_20px_60px_rgba(62,229,140,0.3)] transition-transform hover:-translate-y-0.5">
-            <svg class="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        <p class="reveal mx-auto mt-6 max-w-2xl text-lg leading-relaxed font-medium text-muted-foreground sm:text-xl [--d:160ms]" data-en="You freelance. Every client comes with a Gmail, a hosting panel, a database and a server. Bóveda keeps them organized by client and encrypts everything in your browser before it leaves.">Eres freelance. Cada cliente trae su Gmail, su hosting, su base de datos y su servidor. Bóveda los organiza por cliente y cifra todo en tu navegador antes de que salga.</p>
+        <div class="reveal mt-9 flex flex-wrap items-center justify-center gap-3 [--d:240ms]">
+          <a href="https://github.com/yairhdz24/boveda7k" rel="noopener" class="flex items-center gap-2.5 rounded-full bg-primary px-7 py-4 font-extrabold text-primary-foreground shadow-[0_20px_70px_rgba(62,229,140,0.35)] transition-transform hover:-translate-y-0.5">
+            <svg class="size-5"><use href="#i-github"/></svg>
             <span data-en="View on GitHub">Ver en GitHub</span>
           </a>
-          <a href="#instalar" class="rounded-full border border-border bg-card px-6 py-3.5 font-bold transition-colors hover:border-border-strong" data-en="Install in 5 minutes">Instalar en 5 minutos</a>
+          <a href="#demo" class="rounded-full border border-border bg-card/70 px-7 py-4 font-bold backdrop-blur transition-colors hover:border-border-strong" data-en="Try the live demo">Probar la demo</a>
         </div>
       </div>
-      <div class="reveal mx-auto w-full max-w-[320px] [--d:200ms]">
-        <div class="overflow-hidden rounded-[2.6rem] border-[6px] border-[#2c332f] bg-black shadow-[0_40px_120px_rgba(0,0,0,0.7)]">
-          <video id="promo" class="block aspect-[9/16] w-full" controls playsinline preload="none" poster="media/promo-poster.jpg" src="media/promo-es.mp4"></video>
+
+      <!-- Escena 3D: la app por capas -->
+      <div class="scene reveal mx-auto mt-28 max-w-5xl px-7 sm:mt-20 sm:px-5 [--d:300ms]">
+        <div class="scene-inner aspect-[16/10]">
+          <img src="screenshots/hero.png" alt="Las credenciales de un cliente en Bóveda" width="2880" height="1800" class="shadow-float absolute inset-0 size-full rounded-2xl border border-border object-cover sm:rounded-3xl" />
+          <img src="media/palette.png" alt="" class="layer shadow-float top-[-7%] right-[-4%] w-[46%] rounded-2xl border border-primary/30 [--z:150px] [--delay:-1.2s]" />
+          <img src="media/card1.png" alt="" class="layer shadow-float bottom-[-9%] left-[-5%] w-[38%] rounded-2xl [--z:110px] [--delay:-3s]" />
+          <div class="layer shadow-float right-[6%] bottom-[8%] flex items-center gap-2.5 rounded-full bg-primary px-4 py-2.5 text-sm font-extrabold text-primary-foreground sm:px-5 sm:py-3 sm:text-base [--z:230px] [--delay:-2s]">
+            <svg class="size-5 fill-none stroke-current stroke-[3]" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg>
+            <span data-en="Password copied">Contraseña copiada</span>
+          </div>
+          <div class="layer shadow-float top-[30%] left-[-3%] hidden items-center gap-3 rounded-3xl border border-primary/40 bg-card/90 px-4 py-3 backdrop-blur sm:flex [--z:200px] [--delay:-4s]">
+            <span class="grid size-11 place-items-center rounded-2xl bg-primary text-primary-foreground"><svg class="size-6 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-finger"/></svg></span>
+            <span class="text-left"><span class="block text-sm font-extrabold">Touch ID</span><span class="block text-xs font-semibold text-muted-foreground" data-en="Unlocked">Desbloqueada</span></span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Antes / después -->
-    <section class="mx-auto max-w-6xl px-5 py-16">
-      <h2 class="reveal font-display text-3xl font-bold tracking-tight sm:text-4xl" data-en="Bóveda does the exact opposite">Bóveda hace justo lo contrario</h2>
-      <div class="mt-8 grid gap-4 md:grid-cols-2">
-        <div class="reveal rounded-3xl border border-border bg-card p-7">
+    <!-- Cinta inclinada de servicios -->
+    <section aria-hidden="true" class="relative z-10 -mt-4 overflow-hidden py-14 sm:py-20">
+      <div class="band grid gap-3 bg-primary py-4 text-primary-foreground">
+        <div class="marquee font-display text-xl font-bold sm:text-2xl">
+          <span class="flex shrink-0 gap-10 px-5"><span>Google Workspace</span><span>✦</span><span>Meta</span><span>✦</span><span>Supabase</span><span>✦</span><span>Vercel</span><span>✦</span><span>Cloudflare</span><span>✦</span><span>Hostinger</span><span>✦</span><span>WordPress</span><span>✦</span><span>Stripe</span><span>✦</span><span>GitHub</span><span>✦</span><span>Hetzner</span><span>✦</span><span>Shopify</span><span>✦</span></span>
+          <span class="flex shrink-0 gap-10 px-5"><span>Google Workspace</span><span>✦</span><span>Meta</span><span>✦</span><span>Supabase</span><span>✦</span><span>Vercel</span><span>✦</span><span>Cloudflare</span><span>✦</span><span>Hostinger</span><span>✦</span><span>WordPress</span><span>✦</span><span>Stripe</span><span>✦</span><span>GitHub</span><span>✦</span><span>Hetzner</span><span>✦</span><span>Shopify</span><span>✦</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Antes / con Bóveda ═══ -->
+    <section class="relative mx-auto max-w-6xl px-5 py-16">
+      <h2 class="reveal mx-auto max-w-3xl text-center font-display text-4xl leading-tight font-bold tracking-tighter text-balance sm:text-5xl">
+        <span data-en="Passwords buried in chats?">¿Contraseñas perdidas en chats?</span>
+        <span class="text-primary" data-en="Bóveda does the exact opposite.">Bóveda hace justo lo contrario.</span>
+      </h2>
+      <div class="mt-14 grid items-center gap-8 md:grid-cols-[1fr_auto_1fr]">
+        <div class="reveal blob-a -rotate-2 border-2 border-dashed border-border-strong/50 bg-card/60 p-8">
           <p class="text-sm font-extrabold tracking-widest text-faint uppercase" data-en="Before">Antes</p>
-          <ul class="mt-5 grid gap-4 font-medium text-muted-foreground">
-            <li data-en="A loose note for every client">Una nota suelta por cada cliente</li>
-            <li data-en="Passwords buried in WhatsApp chats and old emails">Contraseñas perdidas en chats de WhatsApp y correos viejos</li>
-            <li data-en="Ten minutes hunting for a login">Diez minutos buscando un acceso</li>
-            <li data-en="“Which email did I use for this?”">«¿Con qué correo entré a esto?»</li>
+          <ul class="mt-6 grid gap-5 text-lg font-medium text-muted-foreground">
+            <li class="flex gap-3"><svg class="mt-1 size-5 shrink-0 fill-none stroke-[#ff7a7a] stroke-[2.5]" stroke-linecap="round"><use href="#i-x"/></svg><span data-en="A loose note for every client">Una nota suelta por cada cliente</span></li>
+            <li class="flex gap-3"><svg class="mt-1 size-5 shrink-0 fill-none stroke-[#ff7a7a] stroke-[2.5]" stroke-linecap="round"><use href="#i-x"/></svg><span data-en="Passwords buried in WhatsApp chats and old emails">Contraseñas perdidas en chats de WhatsApp y correos viejos</span></li>
+            <li class="flex gap-3"><svg class="mt-1 size-5 shrink-0 fill-none stroke-[#ff7a7a] stroke-[2.5]" stroke-linecap="round"><use href="#i-x"/></svg><span data-en="Ten minutes hunting for a login">Diez minutos buscando un acceso</span></li>
+            <li class="flex gap-3"><svg class="mt-1 size-5 shrink-0 fill-none stroke-[#ff7a7a] stroke-[2.5]" stroke-linecap="round"><use href="#i-x"/></svg><span data-en="“Which email did I use for this?”">«¿Con qué correo entré a esto?»</span></li>
           </ul>
         </div>
-        <div class="reveal rounded-3xl border border-primary/30 bg-accent-soft/50 p-7 [--d:100ms]">
+        <div aria-hidden="true" class="reveal squircle mx-auto grid size-20 place-items-center bg-primary text-primary-foreground [--d:120ms]">
+          <svg class="size-8 rotate-90 fill-none stroke-current stroke-[2.5] md:rotate-0" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+        </div>
+        <div class="reveal blob-b rotate-1 border-2 border-primary/40 bg-accent-soft/60 p-8 shadow-[0_30px_100px_rgba(62,229,140,0.12)] [--d:200ms]">
           <p class="text-sm font-extrabold tracking-widest text-primary uppercase" data-en="With Bóveda">Con Bóveda</p>
-          <ul class="mt-5 grid gap-4 font-semibold">
-            <li data-en="One client, all their accounts, with logo and environment">Un cliente, todas sus cuentas, con logo y ambiente</li>
-            <li data-en="AES-256-GCM in your browser; the server only sees ciphertext">AES-256-GCM en tu navegador; el servidor solo ve texto cifrado</li>
-            <li data-en="One shortcut, two letters, copied">Un atajo, dos letras, copiado</li>
-            <li data-en="Linked accounts remember which one signs in">Las cuentas vinculadas recuerdan con cuál se entra</li>
+          <ul class="mt-6 grid gap-5 text-lg font-semibold">
+            <li class="flex gap-3"><svg class="mt-1 size-5 shrink-0 fill-none stroke-primary stroke-[3]" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg><span data-en="One client, all their accounts, with logo and environment">Un cliente, todas sus cuentas, con logo y ambiente</span></li>
+            <li class="flex gap-3"><svg class="mt-1 size-5 shrink-0 fill-none stroke-primary stroke-[3]" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg><span data-en="AES-256-GCM in your browser; the server only sees ciphertext">AES-256-GCM en tu navegador; el servidor solo ve texto cifrado</span></li>
+            <li class="flex gap-3"><svg class="mt-1 size-5 shrink-0 fill-none stroke-primary stroke-[3]" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg><span data-en="One shortcut, two letters, copied">Un atajo, dos letras, copiado</span></li>
+            <li class="flex gap-3"><svg class="mt-1 size-5 shrink-0 fill-none stroke-primary stroke-[3]" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check"/></svg><span data-en="Linked accounts remember which one signs in">Las cuentas vinculadas recuerdan con cuál se entra</span></li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- Capturas -->
-    <section class="mx-auto max-w-6xl px-5 py-10">
-      <figure class="reveal overflow-hidden rounded-3xl border border-border shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
-        <img src="screenshots/client-drawer.png" alt="Una credencial abierta en el panel lateral" loading="lazy" width="2880" height="1800" class="block h-auto w-full" />
-      </figure>
-      <p class="mt-4 text-center text-sm font-medium text-faint" data-en="All screenshots use fictional demo data.">Todas las capturas usan datos demo ficticios.</p>
-    </section>
-
-    <!-- Funciones -->
-    <section id="funciones" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16">
-      <h2 class="reveal font-display text-3xl font-bold tracking-tight sm:text-4xl" data-en="Built for people who manage other people's accounts">Hecha para quien administra cuentas de otros</h2>
-      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <article class="reveal rounded-3xl border border-border bg-card p-6">
-          <h3 class="font-display text-xl font-semibold" data-en="Organized by client">Organizada por cliente</h3>
-          <p class="mt-2.5 font-medium text-muted-foreground" data-en="Create the client and link the accounts they have on any service. No more lists of loose logins.">Creas al cliente y enlazas las cuentas que tiene en cualquier servicio. Se acabó la lista de accesos sueltos.</p>
-        </article>
-        <article class="reveal rounded-3xl border border-border bg-card p-6 [--d:70ms]">
-          <h3 class="font-display text-xl font-semibold" data-en="Search and copy">Buscar y copiar</h3>
-          <p class="mt-2.5 font-medium text-muted-foreground" data-en="Ctrl K or ⌘K: type two letters and copy a password without opening anything.">Ctrl K o ⌘K: escribes dos letras y copias una contraseña sin abrir nada.</p>
-        </article>
-        <article class="reveal rounded-3xl border border-border bg-card p-6 [--d:140ms]">
-          <h3 class="font-display text-xl font-semibold" data-en="Biometric unlock">Desbloqueo biométrico</h3>
-          <p class="mt-2.5 font-medium text-muted-foreground" data-en="Touch ID, Face ID or Windows Hello with passkeys, without weakening the encryption.">Touch ID, Face ID o Windows Hello con passkeys, sin debilitar el cifrado.</p>
-        </article>
-        <article class="reveal rounded-3xl border border-border bg-card p-6">
-          <h3 class="font-display text-xl font-semibold" data-en="180+ services">Más de 180 servicios</h3>
-          <p class="mt-2.5 font-medium text-muted-foreground" data-en="Google, Meta, Supabase, Vercel, Cloudflare, Stripe and more, each with its logo and field template.">Google, Meta, Supabase, Vercel, Cloudflare, Stripe y más, cada uno con su logo y su plantilla de campos.</p>
-        </article>
-        <article class="reveal rounded-3xl border border-border bg-card p-6 [--d:70ms]">
-          <h3 class="font-display text-xl font-semibold" data-en="Linked accounts">Cuentas vinculadas</h3>
-          <p class="mt-2.5 font-medium text-muted-foreground" data-en="Mark that Tag Manager signs in with the client's Gmail, and the shortcuts copy the right username and password.">Marca que Tag Manager entra con el Gmail del cliente y los atajos copian el usuario y la contraseña correctos.</p>
-        </article>
-        <article class="reveal rounded-3xl border border-border bg-card p-6 [--d:140ms]">
-          <h3 class="font-display text-xl font-semibold" data-en="Automatic hygiene">Higiene automática</h3>
-          <p class="mt-2.5 font-medium text-muted-foreground" data-en="The clipboard clears after 30 s, the vault locks after 15 min idle, and old passwords are flagged for rotation.">El portapapeles se limpia a los 30 s, la bóveda se bloquea a los 15 min sin uso y las contraseñas viejas se marcan para rotar.</p>
-        </article>
+    <!-- ═══ Demo interactiva (datos ficticios, todo corre en esta página) ═══ -->
+    <section id="demo" class="mx-auto max-w-5xl scroll-mt-24 px-5 pt-6 pb-20">
+      <div class="text-center">
+        <p class="reveal inline-flex items-center gap-2 rounded-full bg-accent-soft px-3.5 py-1.5 text-sm font-bold text-primary"><span class="size-2 animate-pulse rounded-full bg-primary"></span><span data-en="Live demo">Demo en vivo</span></p>
+        <h2 class="reveal mt-5 font-display text-4xl leading-tight font-bold tracking-tighter text-balance sm:text-5xl [--d:60ms]" data-en="Try it right here">Pruébala aquí mismo</h2>
+        <p class="reveal mx-auto mt-4 max-w-xl text-lg font-medium text-muted-foreground [--d:120ms]" data-en="Pick a client, search, copy. The data is fictional and nothing leaves this page.">Elige un cliente, busca, copia. Los datos son ficticios y nada sale de esta página.</p>
+      </div>
+      <div data-scroll class="reveal mt-12 [--d:160ms]">
+        <div id="demo-app" class="demo">
+          <div class="demo-bar">
+            <span class="demo-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <label class="demo-search">
+              <svg class="size-5 shrink-0 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-search"/></svg>
+              <input id="demo-q" type="text" autocomplete="off" spellcheck="false" placeholder="Busca: supa, gmail, hosting…" data-en-placeholder="Search: supa, gmail, hosting…" aria-label="Buscar credenciales" />
+              <kbd>Ctrl K</kbd>
+            </label>
+          </div>
+          <div class="demo-body">
+            <div id="demo-clients" class="demo-clients" role="tablist" aria-label="Clientes"></div>
+            <div id="demo-list" class="demo-list" aria-live="polite"></div>
+          </div>
+          <div id="demo-toast" class="demo-toast" role="status"><svg class="size-5 fill-none stroke-current stroke-[3]" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-check"/></svg><span></span></div>
+        </div>
       </div>
     </section>
 
-    <!-- Seguridad -->
-    <section id="seguridad" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16">
-      <div class="reveal rounded-[2rem] border border-border bg-card p-7 sm:p-10">
-        <h2 class="font-display text-3xl font-bold tracking-tight sm:text-4xl" data-en="Encrypted before it leaves your browser">Cifrada antes de salir de tu navegador</h2>
-        <p class="mt-4 max-w-2xl text-lg font-medium text-muted-foreground" data-en="Your master password never travels. It derives a key in your browser, and that key encrypts every credential. The database only stores this:">Tu contraseña maestra nunca viaja. De ella se deriva una llave en tu navegador, y con esa llave se cifra cada credencial. La base de datos solo guarda esto:</p>
-        <pre class="mt-6 overflow-x-auto rounded-2xl border border-border bg-background p-5 font-mono text-sm leading-relaxed text-primary/80"><code>credentials.payload
-4aec9e3500aff278f418e6db68d44ca2317b4e3fd761a088f030
-0db75f38633edcafb417627ac545abc931a791e792d5ade674e5
-a9c0856a48eb8207ca9ebee77522851b5477861a7063a5bdf8a3</code></pre>
-        <ul class="mt-8 grid gap-5 font-medium text-muted-foreground md:grid-cols-2">
-          <li><strong class="text-foreground" data-en="Standard cryptography.">Criptografía estándar.</strong> <span data-en="PBKDF2-SHA256 with 600,000 iterations and AES-256-GCM, through the browser's Web Crypto API.">PBKDF2-SHA256 con 600,000 iteraciones y AES-256-GCM, con la Web Crypto API del navegador.</span></li>
-          <li><strong class="text-foreground" data-en="Your data, your server.">Tus datos, tu servidor.</strong> <span data-en="You deploy it on your own Supabase project. There is no central service that holds anyone's vault.">La despliegas en tu propio proyecto de Supabase. No hay un servicio central que guarde la bóveda de nadie.</span></li>
-          <li><strong class="text-foreground" data-en="Real biometrics.">Biometría de verdad.</strong> <span data-en="Each device wraps the key with a passkey. Without the device and your fingerprint or face, that copy is useless.">Cada dispositivo envuelve la llave con una passkey. Sin el dispositivo y tu huella o rostro, esa copia no sirve.</span></li>
-          <li><strong class="text-foreground" data-en="Honest about limits.">Honesta con sus límites.</strong> <span data-en="The code is open for review but has not had an independent audit yet. If you forget the master password, there is no recovery.">El código está abierto para revisión, pero aún no tiene una auditoría independiente. Si olvidas la contraseña maestra, no hay recuperación.</span></li>
+    <!-- ═══ Funciones (sobre una superficie con bordes curvos) ═══ -->
+    <svg aria-hidden="true" class="wave -mb-px text-card" viewBox="0 0 1440 120" preserveAspectRatio="none"><path fill="currentColor" d="M0 70C220 130 420 10 720 40s520 90 720 20v60H0z"/></svg>
+    <section id="funciones" class="scroll-mt-24 bg-card">
+      <div class="mx-auto max-w-6xl px-5 py-16">
+        <h2 class="reveal max-w-2xl font-display text-4xl leading-tight font-bold tracking-tighter text-balance sm:text-5xl" data-en="Built for people who manage other people's accounts">Hecha para quien administra cuentas de otros</h2>
+        <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <article data-tilt class="tilt reveal blob-a border border-border bg-background p-7 hover:border-primary/40">
+            <span class="squircle grid size-14 place-items-center bg-primary text-primary-foreground"><svg class="size-7 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-users"/></svg></span>
+            <h3 class="mt-6 font-display text-2xl font-semibold tracking-tight" data-en="Organized by client">Organizada por cliente</h3>
+            <p class="mt-3 font-medium text-muted-foreground" data-en="Create the client and link the accounts they have on any service. No more lists of loose logins.">Creas al cliente y enlazas las cuentas que tiene en cualquier servicio. Se acabó la lista de accesos sueltos.</p>
+          </article>
+          <article data-tilt class="tilt reveal blob-b border border-border bg-background p-7 hover:border-primary/40 lg:top-8 [--d:80ms]">
+            <span class="squircle grid size-14 place-items-center bg-primary text-primary-foreground"><svg class="size-7 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-search"/></svg></span>
+            <h3 class="mt-6 font-display text-2xl font-semibold tracking-tight" data-en="Search and copy">Buscar y copiar</h3>
+            <p class="mt-3 font-medium text-muted-foreground" data-en="Ctrl K or ⌘K: type two letters and copy a password without opening anything.">Ctrl K o ⌘K: escribes dos letras y copias una contraseña sin abrir nada.</p>
+          </article>
+          <article data-tilt class="tilt reveal blob-c border border-border bg-background p-7 hover:border-primary/40 [--d:160ms]">
+            <span class="squircle grid size-14 place-items-center bg-primary text-primary-foreground"><svg class="size-7 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-finger"/></svg></span>
+            <h3 class="mt-6 font-display text-2xl font-semibold tracking-tight" data-en="Biometric unlock">Desbloqueo biométrico</h3>
+            <p class="mt-3 font-medium text-muted-foreground" data-en="Touch ID, Face ID or Windows Hello with passkeys, without weakening the encryption.">Touch ID, Face ID o Windows Hello con passkeys, sin debilitar el cifrado.</p>
+          </article>
+          <article data-tilt class="tilt reveal blob-d border border-border bg-background p-7 hover:border-primary/40">
+            <span class="squircle grid size-14 place-items-center bg-accent-soft text-primary"><svg class="size-7 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-grid"/></svg></span>
+            <h3 class="mt-6 font-display text-2xl font-semibold tracking-tight" data-en="180+ services">Más de 180 servicios</h3>
+            <p class="mt-3 font-medium text-muted-foreground" data-en="Google, Meta, Supabase, Vercel, Cloudflare, Stripe and more, each with its logo and field template.">Google, Meta, Supabase, Vercel, Cloudflare, Stripe y más, cada uno con su logo y su plantilla de campos.</p>
+          </article>
+          <article data-tilt class="tilt reveal blob-a border border-border bg-background p-7 hover:border-primary/40 lg:top-8 [--d:80ms]">
+            <span class="squircle grid size-14 place-items-center bg-accent-soft text-primary"><svg class="size-7 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-link"/></svg></span>
+            <h3 class="mt-6 font-display text-2xl font-semibold tracking-tight" data-en="Linked accounts">Cuentas vinculadas</h3>
+            <p class="mt-3 font-medium text-muted-foreground" data-en="Mark that Tag Manager signs in with the client's Gmail, and the shortcuts copy the right username and password.">Marca que Tag Manager entra con el Gmail del cliente y los atajos copian el usuario y la contraseña correctos.</p>
+          </article>
+          <article data-tilt class="tilt reveal blob-b border border-border bg-background p-7 hover:border-primary/40 [--d:160ms]">
+            <span class="squircle grid size-14 place-items-center bg-accent-soft text-primary"><svg class="size-7 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-clock"/></svg></span>
+            <h3 class="mt-6 font-display text-2xl font-semibold tracking-tight" data-en="Automatic hygiene">Higiene automática</h3>
+            <p class="mt-3 font-medium text-muted-foreground" data-en="The clipboard clears after 30 s, the vault locks after 15 min idle, and old passwords are flagged for rotation.">El portapapeles se limpia a los 30 s, la bóveda se bloquea a los 15 min sin uso y las contraseñas viejas se marcan para rotar.</p>
+          </article>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div id="video" class="mx-auto grid max-w-6xl scroll-mt-24 items-center gap-12 px-5 pt-24 pb-16 md:grid-cols-2">
+        <div data-scroll class="reveal relative mx-auto w-full max-w-[300px]">
+          <div aria-hidden="true" class="squircle absolute -inset-10 -z-10 bg-primary/15 blur-2xl"></div>
+          <div class="phone-3d overflow-hidden rounded-[2.8rem] border-[7px] border-[#2c332f] bg-black shadow-[0_50px_140px_rgba(0,0,0,0.75)]">
+            <video id="promo" class="block aspect-[9/16] w-full" controls playsinline preload="none" poster="media/promo-poster.jpg" src="media/promo-es.mp4"></video>
+          </div>
+        </div>
+        <div>
+          <h2 class="reveal font-display text-4xl leading-tight font-bold tracking-tighter text-balance sm:text-5xl" data-en="See it in 40 seconds">Mírala en 40 segundos</h2>
+          <p class="reveal mt-5 text-lg font-medium text-muted-foreground [--d:80ms]" data-en="From the chaos of chats and notes to one shortcut. The whole idea, in less than a minute.">Del caos de chats y notas a un solo atajo. Toda la idea, en menos de un minuto.</p>
+          <ol class="mt-8 grid gap-4 font-semibold">
+            <li class="reveal flex items-center gap-4 [--d:120ms]"><span class="grid size-10 shrink-0 place-items-center rounded-full bg-accent-soft font-display font-bold text-primary">1</span><span data-en="Create the client">Creas al cliente</span></li>
+            <li class="reveal flex items-center gap-4 [--d:180ms]"><span class="grid size-10 shrink-0 place-items-center rounded-full bg-accent-soft font-display font-bold text-primary">2</span><span data-en="Link their accounts on any service">Enlazas sus cuentas de cualquier servicio</span></li>
+            <li class="reveal flex items-center gap-4 [--d:240ms]"><span class="grid size-10 shrink-0 place-items-center rounded-full bg-primary font-display font-bold text-primary-foreground">3</span><span data-en="One shortcut and the password is copied">Un atajo y la contraseña está copiada</span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+    <svg aria-hidden="true" class="wave -mt-px text-card" viewBox="0 0 1440 120" preserveAspectRatio="none"><path fill="currentColor" d="M0 0h1440v50c-240 80-480-30-720 10S240 110 0 40z"/></svg>
+
+    <!-- ═══ Seguridad: capas isométricas ═══ -->
+    <section id="seguridad" class="mx-auto grid max-w-6xl scroll-mt-24 items-center gap-10 px-5 py-20 lg:grid-cols-2">
+      <div data-scroll class="iso-wrap reveal order-2 lg:order-1" aria-hidden="true">
+        <div class="iso">
+          <div class="iso-plane [--i:0]"><span class="iso-label"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-server"/></svg><span data-en="Server · ciphertext">Servidor · texto cifrado</span></span></div>
+          <div class="iso-plane is-key [--i:1]"><span class="iso-label"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-lock"/></svg><span>AES-256-GCM</span></span></div>
+          <div class="iso-plane is-key [--i:2]"><span class="iso-label"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-key"/></svg><span data-en="Key · PBKDF2 600k">Llave · PBKDF2 600k</span></span></div>
+          <div class="iso-plane is-top [--i:3]"><svg class="size-24 fill-none stroke-current stroke-[1.6]" stroke-linecap="round" stroke-linejoin="round"><use href="#i-finger"/></svg><span class="iso-label"><span data-en="Your master password">Tu contraseña maestra</span></span></div>
+        </div>
+      </div>
+      <div class="order-1 lg:order-2">
+        <p class="reveal inline-flex items-center gap-2 rounded-full bg-accent-soft px-3.5 py-1.5 text-sm font-bold text-primary"><svg class="size-4 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-shield"/></svg><span data-en="Security model">Modelo de seguridad</span></p>
+        <h2 class="reveal mt-5 font-display text-4xl leading-tight font-bold tracking-tighter text-balance sm:text-5xl" data-en="Encrypted before it leaves your browser">Cifrada antes de salir de tu navegador</h2>
+        <p class="reveal mt-5 text-lg font-medium text-muted-foreground [--d:80ms]" data-en="Your master password never travels. It derives a key in your browser, that key encrypts every credential, and the server only ever stores ciphertext.">Tu contraseña maestra nunca viaja. De ella se deriva una llave en tu navegador, esa llave cifra cada credencial y el servidor solo guarda texto cifrado.</p>
+        <ul class="mt-8 grid gap-5 font-medium text-muted-foreground">
+          <li class="reveal flex gap-4 [--d:120ms]"><span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-accent-soft text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-key"/></svg></span><span><strong class="text-foreground" data-en="Standard cryptography.">Criptografía estándar.</strong> <span data-en="PBKDF2-SHA256 with 600,000 iterations and AES-256-GCM, through the browser's Web Crypto API.">PBKDF2-SHA256 con 600,000 iteraciones y AES-256-GCM, con la Web Crypto API del navegador.</span></span></li>
+          <li class="reveal flex gap-4 [--d:180ms]"><span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-accent-soft text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-server"/></svg></span><span><strong class="text-foreground" data-en="Your data, your server.">Tus datos, tu servidor.</strong> <span data-en="You deploy it on your own Supabase project. There is no central service that holds anyone's vault.">La despliegas en tu propio proyecto de Supabase. No hay un servicio central que guarde la bóveda de nadie.</span></span></li>
+          <li class="reveal flex gap-4 [--d:240ms]"><span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-accent-soft text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-finger"/></svg></span><span><strong class="text-foreground" data-en="Real biometrics.">Biometría de verdad.</strong> <span data-en="Each device wraps the key with a passkey. Without the device and your fingerprint or face, that copy is useless.">Cada dispositivo envuelve la llave con una passkey. Sin el dispositivo y tu huella o rostro, esa copia no sirve.</span></span></li>
+          <li class="reveal flex gap-4 [--d:300ms]"><span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-accent-soft text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-shield"/></svg></span><span><strong class="text-foreground" data-en="Honest about limits.">Honesta con sus límites.</strong> <span data-en="The code is open for review but has not had an independent audit yet. If you forget the master password, there is no recovery.">El código está abierto para revisión, pero aún no tiene una auditoría independiente. Si olvidas la contraseña maestra, no hay recuperación.</span></span></li>
         </ul>
-        <a href="https://github.com/yairhdz24/boveda7k/blob/main/SECURITY.md" rel="noopener" class="mt-8 inline-block font-bold text-primary underline-offset-4 hover:underline" data-en="Read the full threat model →">Lee el modelo de amenazas completo →</a>
+        <a href="https://github.com/yairhdz24/boveda7k/blob/main/SECURITY.md" rel="noopener" class="reveal mt-8 inline-block font-bold text-primary underline-offset-4 hover:underline" data-en="Read the full threat model →">Lee el modelo de amenazas completo →</a>
       </div>
     </section>
 
-    <!-- Instalar -->
-    <section id="instalar" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16">
-      <h2 class="reveal font-display text-3xl font-bold tracking-tight sm:text-4xl" data-en="Yours in 5 minutes">Tuya en 5 minutos</h2>
-      <p class="reveal mt-4 max-w-2xl text-lg font-medium text-muted-foreground" data-en="You need Node 22 and a Supabase project; the free plan is enough.">Necesitas Node 22 y un proyecto de Supabase; el plan gratuito alcanza.</p>
-      <pre class="reveal mt-6 overflow-x-auto rounded-2xl border border-border bg-card p-5 font-mono text-sm leading-loose"><code><span class="text-faint"># 1 · clona e instala</span>
-git clone https://github.com/yairhdz24/boveda7k.git
-cd boveda7k &amp;&amp; npm install
+    <!-- ═══ Instalar ═══ -->
+    <section id="instalar" class="mx-auto max-w-5xl scroll-mt-24 px-5 py-16 text-center">
+      <h2 class="reveal font-display text-4xl leading-tight font-bold tracking-tighter sm:text-5xl" data-en="Yours in 5 minutes">Tuya en 5 minutos</h2>
+      <p class="reveal mx-auto mt-4 max-w-xl text-lg font-medium text-muted-foreground [--d:80ms]" data-en="You need Node 22 and a Supabase project; the free plan is enough.">Necesitas Node 22 y un proyecto de Supabase; el plan gratuito alcanza.</p>
+      <div data-scroll class="reveal mt-12 [--d:120ms]">
+        <div class="term overflow-hidden rounded-[2rem] border border-border bg-card text-left shadow-[0_50px_140px_rgba(0,0,0,0.7),0_0_0_1px_rgba(62,229,140,0.08)]">
+          <div class="flex items-center gap-2 border-b border-border px-5 py-4">
+            <span class="size-3 rounded-full bg-[#ff5f57]"></span><span class="size-3 rounded-full bg-[#febc2e]"></span><span class="size-3 rounded-full bg-[#28c840]"></span>
+            <span class="ml-3 font-mono text-xs text-faint">~/boveda7k</span>
+          </div>
+          <pre class="overflow-x-auto p-6 font-mono text-sm leading-loose sm:text-base"><code><span class="text-faint"># 1 · clona e instala</span>
+<span class="text-primary">$</span> git clone https://github.com/yairhdz24/boveda7k.git
+<span class="text-primary">$</span> cd boveda7k &amp;&amp; npm install
 
 <span class="text-faint"># 2 · pega las migraciones de supabase/migrations en el SQL Editor</span>
 <span class="text-faint"># 3 · copia tus llaves públicas de Supabase</span>
-cp .env.example .env.local
+<span class="text-primary">$</span> cp .env.example .env.local
 
 <span class="text-faint"># 4 · listo</span>
-npm run dev</code></pre>
-      <a href="https://github.com/yairhdz24/boveda7k#quick-start" rel="noopener" class="reveal mt-6 inline-block font-bold text-primary underline-offset-4 hover:underline" data-en="Full guide in the README →">Guía completa en el README →</a>
+<span class="text-primary">$</span> npm run dev</code></pre>
+        </div>
+      </div>
+      <a href="https://github.com/yairhdz24/boveda7k#quick-start" rel="noopener" class="reveal mt-10 inline-block font-bold text-primary underline-offset-4 hover:underline" data-en="Full guide in the README →">Guía completa en el README →</a>
     </section>
 
-    <!-- Cierre -->
-    <section class="mx-auto max-w-6xl px-5 pt-10 pb-24">
-      <div class="reveal rounded-[2rem] bg-primary px-7 py-14 text-center text-primary-foreground sm:px-12">
-        <h2 class="mx-auto max-w-2xl font-display text-4xl font-bold tracking-tighter text-balance sm:text-5xl" data-en="Open source. Free forever.">Open source. Gratis para siempre.</h2>
-        <p class="mx-auto mt-4 max-w-xl text-lg font-semibold opacity-80" data-en="If it saves you ten minutes, give it a star. It helps other freelancers find it.">Si te ahorra diez minutos, regálale una estrella. Ayuda a que otros freelancers la encuentren.</p>
-        <a href="https://github.com/yairhdz24/boveda7k" rel="noopener" class="mt-8 inline-flex items-center gap-2.5 rounded-full bg-primary-foreground px-7 py-4 font-extrabold text-primary transition-transform hover:-translate-y-0.5">
-          <svg class="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.95 6.05 6.6.95-4.8 4.7 1.15 6.6L12 17.65 6.1 20.8l1.15-6.6-4.8-4.7 6.6-.95z"/></svg>
-          <span data-en="Star it on GitHub">Dale estrella en GitHub</span>
-        </a>
+    <!-- ═══ Cierre: un círculo, no una caja ═══ -->
+    <section class="relative overflow-hidden px-5 pt-16 pb-28">
+      <div class="reveal relative mx-auto grid aspect-square w-full max-w-[640px] place-items-center rounded-full bg-primary text-center text-primary-foreground shadow-[0_0_160px_rgba(62,229,140,0.35)]">
+        <div aria-hidden="true" class="orbit -inset-8 border border-primary/30 sm:-inset-14">
+          <span class="top-0 left-1/2 -mt-6 -ml-6 grid size-12 place-items-center rounded-full border border-border bg-card text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-key"/></svg></span>
+          <span class="top-1/2 left-full -mt-6 -ml-6 grid size-12 place-items-center rounded-full border border-border bg-card text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-finger"/></svg></span>
+          <span class="top-full left-1/2 -mt-6 -ml-6 grid size-12 place-items-center rounded-full border border-border bg-card text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-shield"/></svg></span>
+          <span class="top-1/2 left-0 -mt-6 -ml-6 grid size-12 place-items-center rounded-full border border-border bg-card text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-users"/></svg></span>
+        </div>
+        <div class="px-8 sm:px-16">
+          <svg aria-hidden="true" class="star-spin mx-auto size-12 sm:size-16"><use href="#i-star"/></svg>
+          <h2 class="mt-4 font-display text-3xl leading-tight font-bold tracking-tighter text-balance sm:text-5xl" data-en="Open source. Free forever.">Open source. Gratis para siempre.</h2>
+          <p class="mx-auto mt-3 max-w-sm font-semibold opacity-80 sm:text-lg" data-en="If it saves you ten minutes, give it a star. It helps other freelancers find it.">Si te ahorra diez minutos, regálale una estrella. Ayuda a que otros freelancers la encuentren.</p>
+          <a href="https://github.com/yairhdz24/boveda7k" rel="noopener" class="mt-6 inline-flex items-center gap-2.5 rounded-full bg-primary-foreground px-6 py-3.5 font-extrabold text-primary transition-transform hover:-translate-y-0.5 sm:px-8 sm:py-4">
+            <svg class="size-5"><use href="#i-github"/></svg>
+            <span data-en="Star it on GitHub">Dale estrella en GitHub</span>
+          </a>
+        </div>
       </div>
     </section>
   </main>
