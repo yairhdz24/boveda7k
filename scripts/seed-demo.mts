@@ -72,7 +72,7 @@ const CLIENTS: { name: string; website_url: string; notes: string; creds: Cred[]
     website_url: "https://estudiolumen.example",
     notes: "Despacho de arquitectura. App interna en Next.js + Supabase.",
     creds: [
-      { key: "gh", service: "GitHub", title: "Organización estudio-lumen", fields: [["Usuario / correo", "dev@estudiolumen.example"], ["Contraseña", "Git-Lumen_Planos9", true], ["Llave secreta / token", "ghp_DEMO0000000000000000000000", true]] },
+      { key: "gh", service: "GitHub", title: "Organización estudio-lumen", fields: [["Usuario / correo", "dev@estudiolumen.example"], ["Contraseña", "Git-Lumen_Planos9", true], ["Llave secreta / token", "ghp_token-ficticio-demo", true]] },
       { key: "sb", service: "Supabase", title: "Proyecto de producción", fields: [["Llave secreta / token", "sb_secret_DEMO_9f2c1a7e44b0", true]], notes: "La llave secreta solo se usa en el cron de respaldos.", via: "gh" },
       { key: "db", service: "Supabase", title: "Postgres directo", env: "staging", fields: [["Host", "db.lumen-staging.example"], ["Puerto", "5432"], ["Base de datos", "postgres"], ["Usuario", "postgres"], ["Contraseña", "pg-Staging-Lumen-5531", true]] },
       { key: "vc", service: "Vercel", title: "Equipo Lumen", fields: [], via: "gh" },
@@ -98,7 +98,7 @@ const CLIENTS: { name: string; website_url: string; notes: string; creds: Cred[]
       { key: "g", service: "Gmail / Google Workspace", title: "Recepción", fields: [["Correo", "recepcion@clinicaaurora.example"], ["Contraseña", "Sonrisa.Blanca_61", true]] },
       { key: "ads", service: "Google Ads", title: "Cuenta publicitaria", fields: [["ID de cliente", "481-220-9917"]], via: "g" },
       { key: "gbp", service: "Google Business Profile", title: "Ficha de la clínica", fields: [], via: "g" },
-      { key: "st", service: "Stripe", title: "Cobros de anticipos", fields: [["Usuario / correo", "admin@clinicaaurora.example"], ["Contraseña", "Cobro-Seguro_Aurora7", true], ["Llave secreta / token", "sk_test_DEMO51Hxxxxxxxxxxxxxxx", true]] },
+      { key: "st", service: "Stripe", title: "Cobros de anticipos", fields: [["Usuario / correo", "admin@clinicaaurora.example"], ["Contraseña", "Cobro-Seguro_Aurora7", true], ["Llave secreta / token", "sk_test_llave-ficticia-demo", true]] },
     ],
   },
 ];
