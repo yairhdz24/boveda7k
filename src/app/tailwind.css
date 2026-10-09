@@ -1,0 +1,56 @@
+/*
+ * Tailwind v4 conectado a los tokens del Design System Bóveda (tokens.css).
+ * Sin preflight: convive con app.css mientras se migra el resto de la interfaz.
+ * Ojo: sin preflight, `border` necesita `border-solid` y los <button> conservan su estilo nativo.
+ */
+@layer theme, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --breakpoint-desk: 901px;
+
+  --font-display: var(--font-display);
+
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --color-card: var(--surface);
+  --color-popover: var(--surface);
+  --color-raised: var(--surface-raised);
+  --color-sunken: var(--surface-sunken);
+  --color-muted: var(--surface-raised);
+  --color-muted-foreground: var(--ink-muted);
+  --color-faint: var(--ink-faint);
+  --color-border: var(--line);
+  --color-border-strong: var(--line-strong);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--on-accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-ring: var(--focus);
+  --color-info: var(--info);
+  --color-warning: var(--warning);
+  --color-destructive: var(--danger);
+
+  --shadow-pop: var(--shadow-pop);
+
+  --animate-sheet-in: sheet-in 0.26s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-sheet-out: sheet-out 0.18s ease-in forwards;
+  --animate-fade-in: tw-fade-in 0.24s ease-out;
+  --animate-fade-out: tw-fade-out 0.18s ease-in forwards;
+}
+
+/* El panel entra desde la derecha en escritorio y desde abajo en móvil */
+:root { --sheet-from: 40px 0; }
+@media (max-width: 900px) { :root { --sheet-from: 0 48px; } }
+
+@keyframes sheet-in { from { translate: var(--sheet-from); opacity: 0; } }
+@keyframes sheet-out { to { translate: var(--sheet-from); opacity: 0; } }
+@keyframes tw-fade-in { from { opacity: 0; } }
+@keyframes tw-fade-out { to { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --sheet-from: 0 0; }
+}

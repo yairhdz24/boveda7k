@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronsDownUp, ChevronsUpDown, ExternalLink, KeyRound, Pencil, Plus, Search, SearchX, Trash2, X } from "lucide-react";
+import { ExternalLink, KeyRound, Pencil, Plus, Search, SearchX, Trash2, X } from "lucide-react";
 import { deleteClient, deleteCredential, getClient, listCredentials } from "@/lib/data";
 import { hostOf } from "@/lib/presets";
 import { useDek, useVault } from "@/lib/vault";
@@ -10,6 +10,7 @@ import type { Client, Credential, Env } from "@/lib/types";
 import { ENV_LABEL } from "@/lib/types";
 import { useData } from "@/components/Shell";
 import { CredentialCard, type Linked } from "@/components/CredentialCard";
+import { CredentialDrawer } from "@/components/CredentialDrawer";
 import { Button, ConfirmDialog, EmptyState, IconButton, LogoTile } from "@/components/ui";
 import { ClientDialog } from "@/components/forms/ClientDialog";
 import { CredentialDialog } from "@/components/forms/CredentialDialog";
@@ -27,7 +28,7 @@ export default function ClientPage() {
   const [serviceFilter, setServiceFilter] = useState<string | "all">("all");
   const [envFilter, setEnvFilter] = useState<Env | "all">("all");
   const [query, setQuery] = useState("");
-  const [open, setOpen] = useState<Set<string>>(new Set());
+  const [selected, setSelected] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
   const [editClient, setEditClient] = useState(false);
@@ -52,12 +53,10 @@ export default function ClientPage() {
     load();
   }, [load]);
 
-  // Salta a la credencial si viene de ⌘K
+  // Abre la credencial en el panel si viene de ⌘K
   useEffect(() => {
     if (loading || !location.hash.startsWith("#c-")) return;
-    const cid = location.hash.slice(3);
-    setOpen((o) => new Set(o).add(cid));
-    requestAnimationFrame(() => document.getElementById(`c-${cid}`)?.scrollIntoView({ behavior: "smooth", block: "center" }));
+    setSelected(location.hash.slice(3));
   }, [loading]);
 
   // Vínculos "inicia sesión con": hijo → cuenta, y cuenta → quiénes la usan
@@ -95,20 +94,7 @@ export default function ClientPage() {
       .sort((x, y) => (serviceById(x.service_id)?.name ?? "~").localeCompare(serviceById(y.service_id)?.name ?? "~") || x.title.localeCompare(y.title));
   }, [creds, serviceFilter, envFilter, query, serviceById, byId]);
 
-  const toggle = (cid: string) => setOpen((o) => { const n = new Set(o); if (n.has(cid)) n.delete(cid); else n.add(cid); return n; });
-  const allOpen = shown.length > 0 && shown.every((c) => open.has(c.id));
-  /** Abre una credencial y la lleva a la vista; si un filtro la oculta, se quitan los filtros. */
-  const jumpTo = (cid: string) => {
-    if (!shown.some((c) => c.id === cid)) { setQuery(""); setServiceFilter("all"); setEnvFilter("all"); }
-    setOpen((o) => new Set(o).add(cid));
-    setTimeout(() => {
-      const el = document.getElementById(`c-${cid}`);
-      el?.scrollIntoView({ behavior: "smooth", block: "center" });
-      el?.classList.add("is-flash");
-      setTimeout(() => el?.classList.remove("is-flash"), 1200);
-    }, 60);
-  };
-  const toggleAll = () => setOpen(allOpen ? new Set() : new Set(shown.map((c) => c.id)));
+  const current = selected ? byId.get(selected) ?? null : null;
 
   // "/" enfoca el buscador
   useEffect(() => {
@@ -180,9 +166,6 @@ export default function ClientPage() {
                 ))}
               </div>
             )}
-            <Button size="sm" icon={allOpen ? <ChevronsDownUp /> : <ChevronsUpDown />} onClick={toggleAll} disabled={!shown.length}>
-              {allOpen ? "Contraer todo" : "Expandir todo"}
-            </Button>
           </div>
           {serviceIds.length > 1 && (
             <div className="chips">
@@ -220,23 +203,22 @@ export default function ClientPage() {
         ) : (
           <div className="cred-grid">
             {shown.map((c) => (
-              <CredentialCard
-                key={c.id}
-                credential={c}
-                service={serviceById(c.service_id)}
-                expanded={open.has(c.id)}
-                onToggle={() => toggle(c.id)}
-                onEdit={() => setCredDialog({ open: true, credential: c })}
-                onDelete={() => setToDelete(c)}
-                via={viaOf(c)}
-                usedBy={usedBy.get(c.id)}
-                onJump={jumpTo}
-              />
+              <CredentialCard key={c.id} credential={c} service={serviceById(c.service_id)} selected={selected === c.id} onOpen={() => setSelected(c.id)} via={viaOf(c)} usedBy={usedBy.get(c.id)} />
             ))}
           </div>
         )
       )}
 
+      <CredentialDrawer
+        credential={current}
+        service={serviceById(current?.service_id ?? null)}
+        via={current ? viaOf(current) : undefined}
+        usedBy={current ? usedBy.get(current.id) : undefined}
+        onClose={() => setSelected(null)}
+        onEdit={(c) => { setSelected(null); setCredDialog({ open: true, credential: c }); }}
+        onDelete={(c) => { setSelected(null); setToDelete(c); }}
+        onJump={setSelected}
+      />
       <CredentialDialog open={credDialog.open} credential={credDialog.credential} clientId={client.id} onClose={() => setCredDialog({ open: false })} onSaved={refresh} siblings={creds} />
       <ClientDialog open={editClient} client={client} onClose={() => { setEditClient(false); load(); }} />
       <ConfirmDialog

@@ -6,6 +6,7 @@ import "@fontsource/geist-mono/500.css";
 import { SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 import "./tokens.css";
 import "./app.css";
+import "./tailwind.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

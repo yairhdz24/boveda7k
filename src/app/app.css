@@ -64,25 +64,7 @@ button, input, select, textarea { font-family: inherit; }
 .chip-count { font: 700 11px/14px var(--font-sans); padding: 1px 7px; border-radius: var(--radius-pill); background: var(--surface-raised); color: var(--ink-faint); }
 .chip.is-on .chip-count { background: var(--accent); color: var(--on-accent); }
 
-.cred-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-3); align-items: start; grid-auto-flow: row dense; }
-.cred-tile { transition: border-color .15s, box-shadow .2s, transform .15s; scroll-margin: 120px; }
-.cred-tile:not(.is-open):hover { border-color: var(--line-strong); transform: translateY(-1px); }
-.cred-tile.is-open { grid-column: 1 / -1; border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent), var(--shadow-pop); }
-.cred-tile-head { display: flex; align-items: center; gap: 4px; padding-right: 8px; }
-.cred-tile-toggle { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 14px 8px 14px 14px; border: 0; background: none; color: inherit; text-align: left; cursor: pointer; border-radius: var(--radius-lg); }
-.cred-tile-toggle:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
-.cred-tile-titles { flex: 1; min-width: 0; display: grid; gap: 1px; }
-.cred-tile-title { font: 700 15px/20px var(--font-sans); color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cred-tile-sub { font: 600 12px/16px var(--font-sans); color: var(--ink-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cred-tile-user { font: 400 12px/16px var(--font-mono); color: var(--ink-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
-.cred-tile-meta { display: grid; justify-items: end; gap: 6px; flex: none; }
-.cred-tile-stale { width: 8px; height: 8px; border-radius: 4px; background: var(--warning); box-shadow: 0 0 0 3px color-mix(in srgb, var(--warning) 20%, transparent); }
-.cred-tile-chevron { width: 18px; height: 18px; color: var(--ink-faint); flex: none; transition: transform .25s cubic-bezier(.2,.8,.2,1); }
-.cred-tile.is-open .cred-tile-chevron { transform: rotate(180deg); color: var(--accent-ink); }
-.cred-tile-quick { display: flex; gap: 2px; flex: none; }
-.cred-tile-collapse:not([hidden]) { animation: cred-open .28s cubic-bezier(.2,.8,.2,1); }
-.cred-tile-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: 0 var(--space-4) var(--space-3) var(--space-5); border-bottom: 1px solid var(--line); margin-bottom: var(--space-4); }
-@keyframes cred-open { from { opacity: 0; transform: translateY(-6px); } }
+.cred-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-3); align-items: stretch; }
 
 /* Cuentas vinculadas ("inicia sesión con") */
 .cred-tile-via { display: inline-flex; align-items: center; gap: 5px; min-width: 0; margin-top: 2px; font: 600 12px/16px var(--font-sans); color: var(--info); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -100,8 +82,6 @@ button, input, select, textarea { font-family: inherit; }
 .via-link-go { display: inline-flex; align-items: center; gap: 4px; font: 700 12px/16px var(--font-sans); color: var(--info); white-space: nowrap; }
 .via-link-go svg { width: 14px; height: 14px; }
 .used-by { display: flex; gap: 6px; flex-wrap: wrap; }
-.cred-tile.is-flash { animation: cred-flash 1.2s ease-out; }
-@keyframes cred-flash { 0%, 40% { box-shadow: 0 0 0 3px var(--info), var(--shadow-pop); } }
 
 .access-mode { width: fit-content; }
 .access-mode button { display: inline-flex; align-items: center; gap: 8px; }
@@ -314,7 +294,6 @@ button, input, select, textarea { font-family: inherit; }
   .search-field kbd { display: none; }
   .cred-grid { grid-template-columns: 1fr; gap: 10px; }
   .cred-tile-quick .bv-icon-btn { width: 40px; height: 40px; }
-  .cred-tile-bar { padding-left: 16px; }
   .via-box { padding: 0 16px 14px; }
   .access-mode { width: 100%; }
   .provider-picker { grid-template-columns: 1fr; }

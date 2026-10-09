@@ -1,137 +1,82 @@
 "use client";
 
-import { ArrowUpRight, ChevronDown, Copy, ExternalLink, KeyRound, Link2, Pencil, Trash2, TriangleAlert, User } from "lucide-react";
+import { KeyRound, Link2, TriangleAlert, User } from "lucide-react";
 import type { Credential, Service } from "@/lib/types";
 import { useVault } from "@/lib/vault";
-import { Badge, IconButton, LogoTile, SecretField } from "@/components/ui";
+import { cn } from "@/lib/cn";
+import { Badge, IconButton, LogoTile } from "@/components/ui";
 
-const DAY = 86_400_000;
-
-function ago(iso: string) {
-  const d = Math.floor((Date.now() - new Date(iso).getTime()) / DAY);
-  if (d <= 0) return "hoy";
-  if (d === 1) return "ayer";
-  if (d < 30) return `hace ${d} días`;
-  const m = Math.floor(d / 30);
-  return m === 1 ? "hace 1 mes" : `hace ${m} meses`;
-}
-
+export const DAY = 86_400_000;
 export type Linked = { credential: Credential; service?: Service };
+
+export const userOf = (c?: Credential) => c?.secret?.fields.find((f) => !f.secret && f.value);
+export const secretOf = (c?: Credential) => c?.secret?.fields.find((f) => f.secret && f.value);
 
 type Props = {
   credential: Credential;
   service?: Service;
-  expanded: boolean;
-  onToggle: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
+  selected: boolean;
+  onOpen: () => void;
   /** Cuenta con la que se inicia sesión; "missing" si se borró. */
   via?: Linked | "missing";
   /** Credenciales que inician sesión con esta. */
   usedBy?: Linked[];
-  onJump?: (id: string) => void;
 };
 
-const userOf = (c?: Credential) => c?.secret?.fields.find((f) => !f.secret && f.value);
-const secretOf = (c?: Credential) => c?.secret?.fields.find((f) => f.secret && f.value);
-
-export function CredentialCard({ credential: c, service, expanded, onToggle, onEdit, onDelete, via, usedBy = [], onJump }: Props) {
+/** Tarjeta compacta: el detalle completo se abre en el panel lateral (CredentialDrawer). */
+export function CredentialCard({ credential: c, service, selected, onOpen, via, usedBy = [] }: Props) {
   const { copy } = useVault();
   const stale = Date.now() - new Date(c.last_rotated_at).getTime() > 90 * DAY;
-  const fields = c.secret?.fields.filter((f) => f.value) ?? [];
   const linked = via && via !== "missing" ? via : undefined;
   // Con cuenta vinculada, los atajos copian el usuario y la contraseña de esa cuenta
-  const user = fields.find((f) => !f.secret) ?? userOf(linked?.credential);
-  const secret = fields.find((f) => f.secret) ?? secretOf(linked?.credential);
-  const bodyId = `cb-${c.id}`;
+  const user = userOf(c) ?? userOf(linked?.credential);
+  const secret = secretOf(c) ?? secretOf(linked?.credential);
 
   return (
-    <article className={`bv-cred cred-tile ${expanded ? "is-open" : ""}`} id={`c-${c.id}`}>
-      <div className="cred-tile-head">
-        <button type="button" className="cred-tile-toggle" aria-expanded={expanded} aria-controls={bodyId} onClick={onToggle}>
-          <LogoTile src={service?.logo_url} name={service?.name ?? c.title} size={44} />
-          <span className="cred-tile-titles">
-            <span className="cred-tile-title">{c.title}</span>
-            <span className="cred-tile-sub">{service?.name ?? "Sin servicio"}</span>
-            {!expanded && linked && (
-              <span className="cred-tile-via"><Link2 aria-hidden /> con {linked.service?.name ?? linked.credential.title}{user ? ` · ${user.value}` : ""}</span>
-            )}
-            {!expanded && via === "missing" && <span className="cred-tile-via is-broken"><TriangleAlert aria-hidden /> Cuenta vinculada eliminada</span>}
-            {!expanded && !via && user && <span className="cred-tile-user">{user.value}</span>}
-          </span>
-          <span className="cred-tile-meta">
-            <Badge tone={c.environment} />
-            {usedBy.length > 0 && <span className="cred-tile-links" title={`Se usa para entrar a ${usedBy.length} servicio(s)`}><Link2 aria-hidden />{usedBy.length}</span>}
-            {stale && <span className="cred-tile-stale" title="Lleva más de 90 días sin rotarse" />}
-          </span>
-          <ChevronDown className="cred-tile-chevron" aria-hidden />
-        </button>
-        {!expanded && !c.decryptError && (
-          <div className="cred-tile-quick">
+    <article
+      id={`c-${c.id}`}
+      onClick={onOpen}
+      className={cn(
+        "flex min-w-0 scroll-mt-[120px] cursor-pointer flex-col overflow-hidden rounded-lg border border-solid border-border bg-card transition-[border-color,box-shadow,translate] duration-150",
+        "hover:-translate-y-px hover:border-border-strong",
+        selected && "border-primary/45 shadow-[0_0_0_1px_color-mix(in_srgb,var(--accent)_20%,transparent)] hover:border-primary/45",
+      )}
+    >
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        onClick={(e) => { e.stopPropagation(); onOpen(); }}
+        className="flex flex-1 cursor-pointer items-start gap-3 rounded-t-lg border-0 bg-transparent px-3.5 pt-3.5 pb-2.5 text-left text-inherit focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
+      >
+        <LogoTile src={service?.logo_url} name={service?.name ?? c.title} size={44} />
+        <span className="grid min-w-0 flex-1 gap-0.5">
+          <span className="line-clamp-2 text-[15px]/5 font-bold text-foreground wrap-anywhere">{c.title}</span>
+          <span className="truncate text-xs/4 font-semibold text-muted-foreground">{service?.name ?? "Sin servicio"}</span>
+        </span>
+      </button>
+      <div className="flex min-h-12 items-center gap-2 border-0 border-t border-solid border-border py-1.5 pr-2 pl-3.5">
+        <span className="grid min-w-0 flex-1">
+          {c.decryptError ? (
+            <span className="cred-tile-via is-broken"><TriangleAlert aria-hidden /> No se pudo descifrar</span>
+          ) : linked ? (
+            <span className="cred-tile-via"><Link2 aria-hidden /> con {linked.service?.name ?? linked.credential.title}</span>
+          ) : via === "missing" ? (
+            <span className="cred-tile-via is-broken"><TriangleAlert aria-hidden /> Cuenta vinculada eliminada</span>
+          ) : user ? (
+            <span className="truncate font-mono text-xs/4 font-normal text-faint">{user.value}</span>
+          ) : null}
+        </span>
+        <span className="flex flex-none items-center gap-2">
+          {usedBy.length > 0 && <span className="cred-tile-links" title={`Se usa para entrar a ${usedBy.length} servicio(s)`}><Link2 aria-hidden />{usedBy.length}</span>}
+          {stale && <span className="size-2 rounded-full bg-warning shadow-[0_0_0_3px_color-mix(in_srgb,var(--warning)_20%,transparent)]" title="Lleva más de 90 días sin rotarse" />}
+          <Badge tone={c.environment} />
+        </span>
+        {!c.decryptError && (user || secret) && (
+          <span className="cred-tile-quick flex flex-none gap-0.5" onClick={(e) => e.stopPropagation()}>
             {user && <IconButton label={`Copiar ${user.label}`} onClick={() => copy(user.value, user.label)}><User /></IconButton>}
             {secret && <IconButton label={`Copiar ${secret.label}`} onClick={() => copy(secret.value, secret.label)}><KeyRound /></IconButton>}
-          </div>
+          </span>
         )}
-      </div>
-
-      <div className="cred-tile-collapse" id={bodyId} hidden={!expanded}>
-        <div className="cred-tile-inner">
-          <div className="cred-tile-bar">
-            <span className="bv-cred-sub">
-              {c.login_url ? (
-                <a href={c.login_url} target="_blank" rel="noreferrer noopener">Abrir login <ExternalLink size={11} style={{ verticalAlign: "-1px" }} /></a>
-              ) : (
-                <span className="faint">Sin URL de acceso</span>
-              )}
-            </span>
-            <div className="cred-actions">
-              {secret && <IconButton label={`Copiar ${secret.label}`} onClick={() => copy(secret.value, secret.label)}><Copy /></IconButton>}
-              <IconButton label="Editar" onClick={onEdit}><Pencil /></IconButton>
-              <IconButton label="Eliminar" onClick={onDelete}><Trash2 /></IconButton>
-            </div>
-          </div>
-          {linked && (
-            <div className="via-box">
-              <span className="bv-label">Inicia sesión con</span>
-              <button type="button" className="via-link" onClick={() => onJump?.(linked.credential.id)}>
-                <LogoTile src={linked.service?.logo_url} name={linked.service?.name ?? linked.credential.title} size={36} />
-                <span className="via-link-body">
-                  <b>{linked.service?.name ?? "Cuenta"} · {linked.credential.title}</b>
-                  <small>{userOf(linked.credential)?.value ?? "Sin usuario"}</small>
-                </span>
-                <span className="via-link-go">Ver cuenta <ArrowUpRight aria-hidden /></span>
-              </button>
-            </div>
-          )}
-          {via === "missing" && (
-            <div className="via-box"><span className="cred-error" style={{ padding: 0 }}>La cuenta con la que se iniciaba sesión ya no existe. Edita esta credencial y elige otra.</span></div>
-          )}
-          {usedBy.length > 0 && (
-            <div className="via-box">
-              <span className="bv-label">Se usa para entrar a</span>
-              <div className="used-by">
-                {usedBy.map((u) => (
-                  <button key={u.credential.id} type="button" className="chip" onClick={() => onJump?.(u.credential.id)}>
-                    <LogoTile src={u.service?.logo_url} name={u.service?.name ?? u.credential.title} size={20} />
-                    {u.service?.name ?? u.credential.title}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-          {c.decryptError ? (
-            <div className="cred-error">No se pudo descifrar esta credencial. Puede estar dañada o haber sido cifrada con otra llave.</div>
-          ) : (
-            <div className="bv-cred-body">
-              {fields.map((f, i) => <SecretField key={i} label={f.label} value={f.value} secret={f.secret} />)}
-              {c.secret?.notes && <p className="bv-cred-notes">{c.secret.notes}</p>}
-            </div>
-          )}
-          <footer className="bv-cred-foot">
-            <span>Actualizada {ago(c.updated_at)} · rotada {ago(c.last_rotated_at)}</span>
-            {stale && <span className="is-stale">Rotar pronto</span>}
-          </footer>
-        </div>
       </div>
     </article>
   );
