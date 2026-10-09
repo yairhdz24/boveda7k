@@ -126,8 +126,8 @@
   var LOGOS = { "Gmail / Google Workspace": "gmail", Hostinger: "hostinger", WordPress: "wordpress", Instagram: "instagram", Calendly: "calendly", Cloudflare: "cloudflare", Supabase: "supabase", GitHub: "github", Vercel: "vercel", "Meta Business": "meta", Stripe: "stripe" };
   var COLORS = ["#3ee58c", "#7cc7ff", "#ffb86b", "#c6a4ff", "#ff9bb3", "#f4e58a"];
   var TEXT = {
-    es: { copied: "copiada", user: "Usuario copiado", pass: "Contraseña copiada", none: "Sin resultados. Prueba con «gmail» o «hosting».", placeholder: "Busca: supa, gmail, hosting…" },
-    en: { copied: "copied", user: "Username copied", pass: "Password copied", none: "No results. Try “gmail” or “hosting”.", placeholder: "Search: supa, gmail, hosting…" },
+    es: { empty: "Este cliente aún no tiene credenciales. Crea la primera con «Nueva».", saved: "Cifrada y guardada", client: "Cliente creado", newClient: "Cliente", clientName: "Nombre del cliente", userHint: "usuario@ejemplo.example", copied: "copiada", user: "Usuario copiado", pass: "Contraseña copiada", none: "Sin resultados. Prueba con «gmail» o «hosting».", placeholder: "Busca: supa, gmail, hosting…" },
+    en: { empty: "This client has no credentials yet. Add the first one with “New”.", saved: "Encrypted and saved", client: "Client created", newClient: "Client", clientName: "Client name", userHint: "user@example.example", copied: "copied", user: "Username copied", pass: "Password copied", none: "No results. Try “gmail” or “hosting”.", placeholder: "Search: supa, gmail, hosting…" },
   };
   var CLIENTS = [
     { id: "cn", name: "Café Nómada", creds: [
@@ -225,7 +225,7 @@
     eye.setAttribute("aria-label", "Ver contraseña");
     eye.appendChild(icon("i-eye"));
     eye.addEventListener("click", function () {
-      user.textContent = fakeSecret(cred.title + cred.user);
+      user.textContent = cred.secret || fakeSecret(cred.title + cred.user);
       user.classList.add("is-secret");
       clearTimeout(eye.t);
       eye.t = setTimeout(function () { user.textContent = cred.user; user.classList.remove("is-secret"); }, 3000);
@@ -260,14 +260,16 @@
         } else if (cl.id === current) rows.push([cr, null]);
       });
     });
-    if (!rows.length) listEl.appendChild(el("p", "demo-empty", TEXT[lang()].none));
+    if (!rows.length) listEl.appendChild(el("p", "demo-empty", q ? TEXT[lang()].none : TEXT[lang()].empty));
     rows.forEach(function (r, i) { listEl.appendChild(card(r[0], r[1], i)); });
     clientsEl.querySelectorAll(".demo-client").forEach(function (b) {
+      var owner = CLIENTS.filter(function (c) { return c.id === b.dataset.id; })[0];
+      if (owner) b.querySelector(".demo-count").textContent = String(owner.creds.length);
       b.setAttribute("aria-selected", !q && b.dataset.id === current ? "true" : "false");
     });
   }
 
-  CLIENTS.forEach(function (cl) {
+  function clientButton(cl) {
     var b = el("button", "demo-client");
     b.type = "button";
     b.setAttribute("role", "tab");
@@ -276,8 +278,138 @@
     b.appendChild(el("span", null, cl.name));
     b.appendChild(el("span", "demo-count", String(cl.creds.length)));
     b.addEventListener("click", function () { stop(); current = cl.id; input.value = ""; render(); });
-    clientsEl.appendChild(b);
+    clientsEl.insertBefore(b, addClient);
+  }
+
+  // ── Crear cliente: el botón se convierte en un campo; Enter lo crea ──
+  var addClient = el("button", "demo-add");
+  addClient.type = "button";
+  addClient.appendChild(icon("i-plus"));
+  var addLabel = el("span", null, TEXT[lang()].newClient);
+  addClient.appendChild(addLabel);
+  clientsEl.appendChild(addClient);
+  addClient.addEventListener("click", function () {
+    var field = el("input", "demo-add-input");
+    field.type = "text";
+    field.maxLength = 28;
+    field.autocomplete = "off";
+    field.placeholder = TEXT[lang()].clientName;
+    field.setAttribute("aria-label", TEXT[lang()].clientName);
+    addClient.hidden = true;
+    clientsEl.appendChild(field);
+    field.focus();
+    var done = false;
+    function finish(save) {
+      if (done) return;
+      done = true;
+      var name = field.value.trim();
+      field.remove();
+      addClient.hidden = false;
+      if (!save || !name) return;
+      var cl = { id: "n" + Date.now(), name: name, creds: [] };
+      CLIENTS.push(cl);
+      clientButton(cl);
+      current = cl.id;
+      input.value = "";
+      render();
+      say(TEXT[lang()].client);
+      openDrawer();
+    }
+    field.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") finish(true);
+      if (e.key === "Escape") finish(false);
+    });
+    field.addEventListener("blur", function () { finish(false); });
   });
+  CLIENTS.forEach(clientButton);
+
+  // ── Crear credencial: panel lateral. Todo vive en memoria; nada se envía ni se guarda. ──
+  var drawer = document.getElementById("demo-drawer");
+  var scrim = document.getElementById("demo-scrim");
+  var servicesEl = document.getElementById("demo-services");
+  var fTitle = document.getElementById("demo-f-title");
+  var fUser = document.getElementById("demo-f-user");
+  var fPass = document.getElementById("demo-f-pass");
+  var into = document.getElementById("demo-into");
+  var service = "Supabase";
+  var busy = false;
+  function randomSecret(n) {
+    var chars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!#%&*-_";
+    var bytes = new Uint8Array(n);
+    crypto.getRandomValues(bytes);
+    var out = "";
+    for (var i = 0; i < n; i++) out += chars[bytes[i] % chars.length];
+    return out;
+  }
+  function pickService(name) {
+    service = name;
+    servicesEl.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-checked", b.dataset.service === name ? "true" : "false"); });
+    fTitle.placeholder = name;
+  }
+  Object.keys(LOGOS).forEach(function (name) {
+    var b = el("button", "demo-service");
+    b.type = "button";
+    b.setAttribute("role", "radio");
+    b.setAttribute("aria-label", name);
+    b.title = name;
+    b.dataset.service = name;
+    var img = document.createElement("img");
+    img.src = "media/brands/" + LOGOS[name] + ".svg";
+    img.alt = "";
+    b.appendChild(img);
+    b.addEventListener("click", function () { pickService(name); });
+    servicesEl.appendChild(b);
+  });
+  function openDrawer() {
+    stop();
+    if (input.value) { input.value = ""; render(); }
+    into.textContent = CLIENTS.filter(function (c) { return c.id === current; })[0].name;
+    fTitle.value = "";
+    fUser.value = "";
+    fUser.placeholder = TEXT[lang()].userHint;
+    fUser.classList.remove("is-bad");
+    fPass.value = randomSecret(18);
+    fPass.classList.remove("is-cipher");
+    pickService(service);
+    drawer.inert = false;
+    app.classList.add("is-drawer");
+    setTimeout(function () { fTitle.focus({ preventScroll: true }); }, 250);
+  }
+  function closeDrawer() {
+    drawer.inert = true;
+    app.classList.remove("is-drawer");
+    busy = false;
+  }
+  document.getElementById("demo-new").addEventListener("click", openDrawer);
+  document.getElementById("demo-close").addEventListener("click", closeDrawer);
+  scrim.addEventListener("click", closeDrawer);
+  drawer.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDrawer(); });
+  document.getElementById("demo-gen").addEventListener("click", function () { fPass.value = randomSecret(18); });
+  drawer.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (busy) return;
+    var user = fUser.value.trim();
+    if (!user) { fUser.classList.add("is-bad"); fUser.focus(); return; }
+    fUser.classList.remove("is-bad");
+    busy = true;
+    var cred = { title: fTitle.value.trim() || service, service: service, user: user, secret: fPass.value || randomSecret(18) };
+    // Efecto visual: la contraseña se convierte en texto cifrado antes de guardarse.
+    fPass.classList.add("is-cipher");
+    fPass.value = "v1.gcm." + randomSecret(26);
+    setTimeout(function () {
+      var owner = CLIENTS.filter(function (c) { return c.id === current; })[0];
+      owner.creds.unshift(cred);
+      closeDrawer();
+      render();
+      var first = listEl.querySelector(".demo-card");
+      if (first) {
+        first.classList.add("is-hit");
+        setTimeout(function () { first.classList.remove("is-hit"); }, 2200);
+      }
+      say(TEXT[lang()].saved);
+    }, 700);
+  });
+
   input.addEventListener("input", function () { render(); });
   ["pointerdown", "keydown", "focusin"].forEach(function (ev) { app.addEventListener(ev, function (e) { if (e.isTrusted) stop(); }); });
   document.addEventListener("keydown", function (e) {
@@ -291,6 +423,8 @@
   });
   new MutationObserver(function () {
     input.placeholder = TEXT[lang()].placeholder;
+    addLabel.textContent = TEXT[lang()].newClient;
+    fUser.placeholder = TEXT[lang()].userHint;
     render();
   }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
   input.placeholder = TEXT[lang()].placeholder;

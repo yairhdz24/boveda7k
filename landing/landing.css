@@ -102,7 +102,7 @@ body { background: var(--color-background); color: var(--color-foreground); font
 .demo-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--color-foreground); font: 600 1rem var(--font-sans); }
 .demo-search input::placeholder { color: var(--color-faint); }
 .demo-search kbd { font: 700 0.75rem var(--font-sans); color: var(--color-muted-foreground); background: var(--color-raised); border-radius: 999px; padding: 0.35rem 0.7rem; white-space: nowrap; }
-.demo-body { display: grid; min-height: 25rem; }
+.demo-body { display: grid; min-height: 32rem; }
 .demo-clients { display: flex; gap: 0.5rem; padding: 0.9rem; overflow-x: auto; border-bottom: 1px solid var(--color-border); }
 .demo-client { display: flex; align-items: center; gap: 0.7rem; flex: none; padding: 0.5rem 0.9rem 0.5rem 0.5rem; border-radius: 999px; border: 0; background: none; color: var(--color-muted-foreground); font: 700 0.95rem var(--font-sans); cursor: pointer; transition: background 0.2s, color 0.2s; }
 .demo-client:hover { color: var(--color-foreground); }
@@ -130,6 +130,42 @@ body { background: var(--color-background); color: var(--color-foreground); font
 .demo-btn:active { scale: 0.88; }
 .demo-btn.is-pulse { color: var(--color-primary); background: var(--color-accent-soft); animation: pulse 0.9s ease-in-out infinite; }
 @keyframes pulse { 50% { scale: 1.18; } }
+/* crear: botón, cliente nuevo y panel lateral */
+.demo-new { display: inline-flex; align-items: center; gap: 0.45rem; flex: none; height: 3rem; padding: 0 1.1rem; border: 0; border-radius: 999px; background: var(--color-primary); color: var(--color-primary-foreground); font: 800 0.95rem var(--font-sans); cursor: pointer; box-shadow: 0 10px 30px rgba(62, 229, 140, 0.28); transition: translate 0.2s, box-shadow 0.2s, scale 0.15s; }
+.demo-new:hover { translate: 0 -2px; box-shadow: 0 16px 40px rgba(62, 229, 140, 0.42); }
+.demo-new:active { scale: 0.95; }
+.demo-new svg, .demo-add svg, .demo-save svg { width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.demo-add { display: flex; align-items: center; gap: 0.6rem; flex: none; padding: 0.7rem 1rem; border: 1.5px dashed var(--color-border-strong); border-radius: 999px; background: none; color: var(--color-muted-foreground); font: 700 0.9rem var(--font-sans); cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+.demo-add:hover { color: var(--color-primary); border-color: var(--color-primary); }
+.demo-add[hidden] { display: none; }
+.demo-add-input, .demo-field input { width: 100%; min-width: 0; height: 2.7rem; padding: 0 1rem; border-radius: 1rem; border: 1px solid var(--color-border); background: var(--color-background); color: var(--color-foreground); font: 600 0.95rem var(--font-sans); outline: 0; transition: border-color 0.2s, box-shadow 0.2s; }
+.demo-add-input { flex: none; width: 12rem; border-radius: 999px; }
+.demo-add-input:focus, .demo-field input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 4px rgba(62, 229, 140, 0.15); }
+.demo-field input::placeholder, .demo-add-input::placeholder { color: var(--color-faint); }
+.demo-field input.is-bad { border-color: #ff7b7b; box-shadow: 0 0 0 4px rgba(255, 123, 123, 0.15); }
+.demo-scrim { position: absolute; inset: 0; z-index: 2; background: rgba(3, 6, 4, 0.6); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity 0.35s; }
+.demo-drawer { position: absolute; inset: 0 0 0 auto; z-index: 3; display: flex; flex-direction: column; gap: 0.65rem; width: min(100%, 25rem); padding: 1.1rem 1.3rem 0; overflow-y: auto; background: var(--color-card); border-left: 1px solid var(--color-border); box-shadow: -40px 0 90px rgba(0, 0, 0, 0.6); translate: 104% 0; transition: translate 0.5s cubic-bezier(0.2, 0.9, 0.2, 1); }
+.demo.is-drawer .demo-scrim { opacity: 1; pointer-events: auto; }
+.demo.is-drawer .demo-drawer { translate: 0 0; }
+.demo-drawer-head { display: flex; align-items: center; justify-content: space-between; }
+.demo-drawer-head h3 { font: 700 1.25rem var(--font-display); letter-spacing: -0.02em; }
+.demo-into { margin-top: -0.6rem; font: 600 0.85rem var(--font-sans); color: var(--color-muted-foreground); }
+.demo-into strong { color: var(--color-primary); }
+.demo-label, .demo-field > span:first-child { display: block; font: 700 0.8rem var(--font-sans); color: var(--color-muted-foreground); }
+.demo-field { display: grid; gap: 0.4rem; }
+.demo-services { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.5rem; margin-top: -0.35rem; }
+.demo-service { display: grid; place-items: center; aspect-ratio: 1; border: 0; border-radius: 0.95rem; background: #fff; cursor: pointer; opacity: 0.5; transition: opacity 0.2s, scale 0.2s cubic-bezier(0.2, 1.4, 0.3, 1), box-shadow 0.2s; }
+.demo-service img { width: 58%; height: 58%; object-fit: contain; }
+.demo-service:hover { opacity: 0.85; scale: 1.06; }
+.demo-service[aria-checked="true"] { opacity: 1; box-shadow: 0 0 0 3px var(--color-card), 0 0 0 5px var(--color-primary); }
+.demo-pass { display: flex; gap: 0.5rem; }
+.demo-pass input { font-family: var(--font-mono); font-size: 0.85rem; }
+.demo-pass input.is-cipher { color: var(--color-primary); border-color: var(--color-primary); }
+.demo-pass button { flex: none; padding: 0 1rem; border: 0; border-radius: 1rem; background: var(--color-raised); color: var(--color-foreground); font: 700 0.85rem var(--font-sans); cursor: pointer; transition: background 0.2s, color 0.2s; }
+.demo-pass button:hover { background: var(--color-accent-soft); color: var(--color-primary); }
+.demo-warn { font: 600 0.78rem/1.4 var(--font-sans); color: var(--color-faint); }
+.demo-save { display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex: none; position: sticky; bottom: 1.1rem; height: 3.2rem; margin: auto 0 1.1rem; border: 0; box-shadow: 0 -18px 24px 6px var(--color-card); border-radius: 999px; background: var(--color-primary); color: var(--color-primary-foreground); font: 800 1rem var(--font-sans); cursor: pointer; transition: translate 0.2s, box-shadow 0.2s; }
+.demo-save:hover { translate: 0 -2px; }
 .demo-btn svg { width: 1.15rem; height: 1.15rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .demo-empty { grid-column: 1 / -1; padding: 3rem 1rem; text-align: center; font: 600 1rem var(--font-sans); color: var(--color-faint); }
 .demo-toast { position: absolute; left: 50%; bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1.3rem; border-radius: 999px; background: var(--color-primary); color: var(--color-primary-foreground); font: 800 0.95rem var(--font-sans); white-space: nowrap; box-shadow: 0 20px 60px rgba(62, 229, 140, 0.35); translate: -50% 150%; opacity: 0; transition: translate 0.45s cubic-bezier(0.2, 1.2, 0.3, 1), opacity 0.3s; pointer-events: none; }
@@ -139,6 +175,8 @@ body { background: var(--color-background); color: var(--color-foreground); font
   .demo-body { grid-template-columns: 15rem 1fr; }
   .demo-clients { flex-direction: column; overflow: visible; border-bottom: 0; border-right: 1px solid var(--color-border); }
   .demo-client { border-radius: 1.1rem; }
+  .demo-add { margin-top: 0.4rem; border-radius: 1.1rem; }
+  .demo-add-input { width: 100%; margin-top: 0.4rem; border-radius: 1.1rem; }
 }
 
 /* ── Teléfono del video ── */
@@ -208,6 +246,6 @@ body { background: var(--color-background); color: var(--color-foreground); font
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; translate: none; scale: 1; filter: none; transition: none; }
   .glow, .floor, .layer, .marquee, .squircle, .star-spin, .finale-stars, .finale-rays, .finale-grad, .chip, .star-btn::after { animation: none; }
-  .scene-inner, .tilt, .phone-3d, .term, .demo { transition: none; }
+  .scene-inner, .tilt, .phone-3d, .term, .demo, .demo-drawer, .demo-scrim { transition: none; }
   .demo-card, .demo-btn.is-pulse { animation: none; }
 }
