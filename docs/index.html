@@ -286,29 +286,46 @@
       <a href="https://github.com/yairhdz24/boveda7k#quick-start" rel="noopener" class="reveal mt-10 inline-block font-bold text-primary underline-offset-4 hover:underline" data-en="Full guide in the README →">Guía completa en el README →</a>
     </section>
 
-    <!-- ═══ Cierre: un círculo, no una caja ═══ -->
-    <section class="relative overflow-hidden px-5 pt-16 pb-28">
-      <div class="reveal relative mx-auto grid aspect-square w-full max-w-[640px] place-items-center rounded-full bg-primary text-center text-primary-foreground shadow-[0_0_160px_rgba(62,229,140,0.35)]">
-        <div aria-hidden="true" class="orbit -inset-8 border border-primary/30 sm:-inset-14">
-          <span class="top-0 left-1/2 -mt-6 -ml-6 grid size-12 place-items-center rounded-full border border-border bg-card text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-key"/></svg></span>
-          <span class="top-1/2 left-full -mt-6 -ml-6 grid size-12 place-items-center rounded-full border border-border bg-card text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-finger"/></svg></span>
-          <span class="top-full left-1/2 -mt-6 -ml-6 grid size-12 place-items-center rounded-full border border-border bg-card text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-shield"/></svg></span>
-          <span class="top-1/2 left-0 -mt-6 -ml-6 grid size-12 place-items-center rounded-full border border-border bg-card text-primary"><svg class="size-5 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-users"/></svg></span>
-        </div>
-        <div class="px-8 sm:px-16">
-          <svg aria-hidden="true" class="star-spin mx-auto size-12 sm:size-16"><use href="#i-star"/></svg>
-          <h2 class="mt-4 font-display text-3xl leading-tight font-bold tracking-tighter text-balance sm:text-5xl" data-en="Open source. Free forever.">Open source. Gratis para siempre.</h2>
-          <p class="mx-auto mt-3 max-w-sm font-semibold opacity-80 sm:text-lg" data-en="If it saves you ten minutes, give it a star. It helps other freelancers find it.">Si te ahorra diez minutos, regálale una estrella. Ayuda a que otros freelancers la encuentren.</p>
-          <a href="https://github.com/yairhdz24/boveda7k" rel="noopener" class="mt-6 inline-flex items-center gap-2.5 rounded-full bg-primary-foreground px-6 py-3.5 font-extrabold text-primary transition-transform hover:-translate-y-0.5 sm:px-8 sm:py-4">
-            <svg class="size-5"><use href="#i-github"/></svg>
+    <!-- ═══ Cierre: amanecer sobre el horizonte ═══ -->
+    <section id="cierre" data-scroll data-tilt class="finale relative overflow-hidden px-5 pt-28 text-center sm:pt-40">
+      <div aria-hidden="true" class="finale-stars"></div>
+      <div aria-hidden="true" class="finale-spot"></div>
+      <div aria-hidden="true" class="finale-rays"></div>
+
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 mx-auto hidden max-w-7xl xl:block">
+        <span class="chip top-[13%] left-[3%] -rotate-6 [--k:1.5]"><svg class="size-4 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-lock"/></svg>AES-256-GCM</span>
+        <span class="chip top-[36%] left-[9%] rotate-3 [--k:0.8] [--delay:-2s]"><svg class="size-4 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-finger"/></svg>Touch ID · Face ID</span>
+        <span class="chip top-[57%] left-[2%] -rotate-3 [--k:1.2] [--delay:-4s]"><svg class="size-4 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-users"/></svg><span data-en="By client">Por cliente</span></span>
+        <span class="chip top-[15%] right-[4%] rotate-6 [--k:1.3] [--delay:-1s]"><svg class="size-4 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-key"/></svg><span data-en="Your key, never ours">Tu llave, nunca nuestra</span></span>
+        <span class="chip top-[38%] right-[9%] -rotate-3 [--k:0.7] [--delay:-3s]"><svg class="size-4 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-server"/></svg><span data-en="Your own Supabase">Tu propio Supabase</span></span>
+        <span class="chip top-[58%] right-[3%] rotate-3 [--k:1.6] [--delay:-5s]"><svg class="size-4 fill-none stroke-current stroke-2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-shield"/></svg><span data-en="No trackers">Sin rastreadores</span></span>
+      </div>
+
+      <div class="relative z-10 mx-auto max-w-3xl">
+        <p class="reveal inline-flex items-center gap-2.5 rounded-full border border-primary/30 bg-accent-soft/70 px-4 py-2 text-sm font-bold text-primary backdrop-blur">
+          <svg aria-hidden="true" class="star-spin size-4"><use href="#i-star"/></svg>
+          <span data-en="MIT license · no paid plans">Licencia MIT · sin planes de pago</span>
+        </p>
+        <h2 class="reveal mt-7 font-display text-5xl leading-[1.02] font-bold tracking-tighter text-balance [--d:80ms] sm:text-7xl">
+          <span class="block">Open source.</span>
+          <span class="finale-grad block pb-2" data-en="Free forever.">Gratis para siempre.</span>
+        </h2>
+        <p class="reveal mx-auto mt-6 max-w-lg text-lg font-medium text-muted-foreground [--d:160ms] sm:text-xl" data-en="If it saves you ten minutes, give it a star. It helps other freelancers find it.">Si te ahorra diez minutos, regálale una estrella. Ayuda a que otros freelancers la encuentren.</p>
+        <div class="reveal mt-10 flex flex-wrap items-center justify-center gap-4 [--d:240ms]">
+          <a href="https://github.com/yairhdz24/boveda7k" rel="noopener" class="star-btn group">
+            <svg aria-hidden="true" class="size-5"><use href="#i-github"/></svg>
             <span data-en="Star it on GitHub">Dale estrella en GitHub</span>
+            <svg aria-hidden="true" class="size-5 transition-transform duration-500 group-hover:scale-125 group-hover:rotate-[72deg]"><use href="#i-star"/></svg>
           </a>
+          <a href="#instalar" class="rounded-full border border-border-strong/60 px-7 py-4 font-bold text-foreground backdrop-blur transition-colors hover:border-primary hover:text-primary" data-en="Install it in 5 minutes">Instálala en 5 minutos</a>
         </div>
       </div>
+
+      <div aria-hidden="true" class="horizon"></div>
     </section>
   </main>
 
-  <footer class="border-t border-border">
+  <footer class="bg-[#090d0b]">
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-8 text-sm font-medium text-faint">
       <p data-en="MIT · Made in Mexico by Yair Hernandez">MIT · Hecha en México por Yair Hernandez</p>
       <p class="flex gap-5">

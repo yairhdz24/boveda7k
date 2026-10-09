@@ -144,16 +144,67 @@ body { background: var(--color-background); color: var(--color-foreground); font
 /* ── Terminal ── */
 .term { transform: perspective(1500px) rotateX(calc(10deg - var(--p, 0.5) * 12deg)) rotateY(-3deg); transition: transform 0.3s ease-out; }
 
-/* ── Cierre: órbitas ── */
-.orbit { position: absolute; inset: 0; border-radius: 50%; animation: spin var(--t, 36s) linear infinite; }
-.orbit > * { position: absolute; animation: spin var(--t, 36s) linear infinite reverse; }
+/* ── Cierre: amanecer sobre el horizonte ── */
+.finale { isolation: isolate; padding-bottom: clamp(13rem, 30vw, 25rem); }
+.finale-stars {
+  position: absolute; inset: 0; z-index: -3;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 27% 61%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 41% 14%, #b9ffd9 50%, transparent 51%), radial-gradient(1px 1px at 58% 38%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 73% 19%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 88% 52%, #b9ffd9 50%, transparent 51%),
+    radial-gradient(1px 1px at 6% 78%, #fff 50%, transparent 51%), radial-gradient(1.5px 1.5px at 94% 9%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 35% 86%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 66% 72%, #fff 50%, transparent 51%);
+  background-size: 620px 520px; opacity: 0.5;
+  mask-image: linear-gradient(to bottom, transparent, black 25%, black 60%, transparent 92%);
+  animation: twinkle 5s ease-in-out infinite alternate;
+}
+@keyframes twinkle { to { opacity: 0.22; } }
+.finale-spot { position: absolute; inset: 0; z-index: -2; opacity: var(--on, 0); transition: opacity 0.5s; background: radial-gradient(560px circle at calc(50% + var(--tx, 0) * 50%) calc(50% + var(--ty, 0) * 50%), rgba(62, 229, 140, 0.09), transparent 65%); }
+/* rayos que suben desde el horizonte */
+.finale-rays {
+  position: absolute; left: 50%; bottom: calc(clamp(7rem, 17vw, 15rem) - min(680px, 90vw) * 0.28 - 20px); z-index: -2; width: min(1700px, 170vw); height: min(680px, 90vw); translate: -50% 0;
+  background:
+    radial-gradient(ellipse 34% 40% at 50% 72%, rgba(62, 229, 140, 0.42), transparent 70%),
+    radial-gradient(ellipse 50% 27% at 50% 72%, rgba(62, 229, 140, 0.22), transparent 72%),
+    repeating-conic-gradient(from -50deg at 50% 72%, rgba(62, 229, 140, 0.11) 0deg 3deg, transparent 3deg 11deg);
+  mask-image: radial-gradient(ellipse 50% 72% at 50% 72%, black 5%, transparent 70%), linear-gradient(to bottom, black 62%, transparent 96%);
+  mask-composite: intersect;
+  opacity: calc(0.35 + var(--p, 0.5) * 0.9); transform-origin: 50% 72%;
+  animation: breathe 7s ease-in-out infinite alternate;
+}
+@keyframes breathe { to { scale: 1.07 1.12; } }
+.horizon {
+  position: absolute; left: 50%; bottom: 0; z-index: -1; width: max(1500px, 170vw); aspect-ratio: 1; border-radius: 50%;
+  translate: -50% calc(100% - clamp(7rem, 17vw, 15rem) + (1 - var(--p, 0.5)) * 70px);
+  background: radial-gradient(ellipse 40% 7% at 50% 0%, #17402a 0%, #0d1a13 45%, #090d0b 100%);
+  box-shadow: 0 0 0 1px rgba(120, 255, 185, 0.55), 0 -3px 22px rgba(62, 229, 140, 0.75), 0 -10px 60px rgba(62, 229, 140, 0.3), inset 0 26px 70px rgba(62, 229, 140, 0.22);
+}
+.finale-grad { background: linear-gradient(100deg, #eef5f0 0%, #3ee58c 30%, #c9ffe2 50%, #3ee58c 70%, #eef5f0 100%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 7s linear infinite; }
+@keyframes sheen { to { background-position: -220% 0; } }
+.chip {
+  position: absolute; display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.7rem 1.1rem; border-radius: 999px; white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, var(--color-border)); background: color-mix(in srgb, var(--color-card) 72%, transparent); backdrop-filter: blur(10px);
+  color: var(--color-foreground); font: 700 0.9rem var(--font-sans); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  translate: calc(var(--tx, 0) * var(--k, 1) * -22px) calc(var(--ty, 0) * var(--k, 1) * -16px); transition: translate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: floaty 6s ease-in-out infinite alternate; animation-delay: var(--delay, 0s);
+}
+.chip svg { color: var(--color-primary); }
+@keyframes floaty { from { transform: translateY(-7px); } to { transform: translateY(9px); } }
+.star-btn {
+  position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 0.7rem; padding: 1rem 1.9rem; border-radius: 999px;
+  background: var(--color-primary); color: var(--color-primary-foreground); font: 800 1.05rem var(--font-sans);
+  box-shadow: 0 0 0 6px rgba(62, 229, 140, 0.12), 0 18px 60px rgba(62, 229, 140, 0.4); transition: translate 0.25s, box-shadow 0.25s;
+}
+.star-btn:hover { translate: 0 -3px; box-shadow: 0 0 0 9px rgba(62, 229, 140, 0.16), 0 26px 80px rgba(62, 229, 140, 0.55); }
+.star-btn::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%); translate: -120% 0; animation: shine 4.5s ease-in-out infinite; }
+@keyframes shine { 0%, 55% { translate: -120% 0; } 100% { translate: 120% 0; } }
 @keyframes spin { to { rotate: 360deg; } }
 .star-spin { animation: spin 22s linear infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; translate: none; scale: 1; filter: none; transition: none; }
-  .glow, .floor, .layer, .marquee, .orbit, .orbit > *, .squircle, .star-spin { animation: none; }
+  .glow, .floor, .layer, .marquee, .squircle, .star-spin, .finale-stars, .finale-rays, .finale-grad, .chip, .star-btn::after { animation: none; }
   .scene-inner, .tilt, .phone-3d, .term, .demo { transition: none; }
   .demo-card, .demo-btn.is-pulse { animation: none; }
 }
