@@ -1,0 +1,9 @@
+{
+  "name": "boveda-landing",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli@4 -i src/landing.css -o site/landing.css --minify && node scripts/stamp.mjs",
+    "preview": "python3 -m http.server 4173 -d site"
+  }
+}
