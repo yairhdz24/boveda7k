@@ -161,7 +161,6 @@ src/app/tokens.css                     Bóveda Design System tokens
 src/app/tailwind.css                   Tailwind v4 wired to those tokens
 scripts/test-crypto.mts                encryption tests
 scripts/seed-demo.mts                  sample data
-docs/index.html + landing/             static landing page (GitHub Pages), no trackers
 ```
 
 ## Roadmap

@@ -5,5 +5,5 @@
       "dependabot/**": false
     }
   },
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)docs' ':(exclude)landing'"
+  "ignoreCommand": "[ \"$IS_LANDING\" = \"1\" ]"
 }

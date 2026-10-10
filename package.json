@@ -15,7 +15,6 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test:crypto": "node --experimental-strip-types scripts/test-crypto.mts",
-    "landing:css": "npx @tailwindcss/cli@4 -i landing/landing.css -o docs/landing.css --minify && node scripts/landing-stamp.mjs",
     "seed:demo": "node --env-file=.env.local --experimental-strip-types scripts/seed-demo.mts"
   },
   "dependencies": {
